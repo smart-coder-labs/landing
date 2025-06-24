@@ -13,10 +13,10 @@ interface BlogPostMetadata {
 }
 
 const articleSlugs = [
-  'arquitectura-hexagonal',
+  'hexagonal-architecture',
   'transformers-nlp',
   'clean-code',
-  'microservicios-vs-monolitos'
+  'microservices-vs-monoliths'
 ];
 
 const BlogSection: React.FC = () => {
@@ -28,6 +28,7 @@ const BlogSection: React.FC = () => {
       try {
         const postsPromises = articleSlugs.map(slug =>
           fetch(`/articles/${slug}/metadata.json`).then(res => {
+            console.log("🚀 ~ fetch ~ res:", res)
             if (!res.ok) {
               throw new Error(`Failed to fetch metadata for ${slug}: ${res.statusText}`);
             }
@@ -35,6 +36,7 @@ const BlogSection: React.FC = () => {
           })
         );
         const posts = await Promise.all(postsPromises);
+        console.log("🚀 ~ fetchBlogPosts ~ posts:", posts)
         setBlogPosts(posts);
       } catch (error) {
         console.error("Error fetching blog posts metadata:", error);
@@ -88,7 +90,7 @@ const BlogSection: React.FC = () => {
             >
               <div className="relative h-48 overflow-hidden">
                 <img 
-                  src={post.image || 'https://via.placeholder.com/1200x630.png?text=Imagen+Articulo'}
+                  src={post.image || '/articles/placeholder.png'}
                   alt={post.title}
                   className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500"
                 />

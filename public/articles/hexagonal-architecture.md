@@ -21,27 +21,58 @@ El término "hexagonal" no implica que haya exactamente seis lados o componentes
 
 ### Componentes Clave
 
-1.  **Dominio (Núcleo de la Aplicación):**
-    *   Contiene la lógica de negocio pura y las reglas.
-    *   No depende de ninguna tecnología específica de infraestructura (bases de datos, frameworks UI, etc.).
-    *   Es el corazón de la aplicación.
+1. **Dominio (Núcleo de la Aplicación):**
+   - Contiene la lógica de negocio pura y las reglas.
+   - No depende de ninguna tecnología específica de infraestructura (bases de datos, frameworks UI, etc.).
+   - Es el corazón de la aplicación.
 
-2.  **Puertos:**
-    *   Son interfaces definidas por el dominio.
-    *   Representan los contratos de comunicación entre el dominio y el mundo exterior.
-    *   Existen dos tipos principales de puertos:
-        *   **Puertos Primarios (Driving Ports):** Utilizados por actores que inician la interacción con la aplicación (e.g., controladores de API, interfaces de usuario). Definen cómo la aplicación es impulsada por el exterior.
-        *   **Puertos Secundarios (Driven Ports):** Utilizados por la aplicación para interactuar con servicios externos (e.g., bases de datos, servicios de mensajería, APIs de terceros). Definen cómo la aplicación impulsa a los servicios externos.
+2. **Puertos:**
+   - Son interfaces definidas por el dominio.
+   - Representan los contratos de comunicación entre el dominio y el mundo exterior.
+   - Existen dos tipos principales de puertos:
+     - **Puertos Primarios (Driving Ports):** Utilizados por actores que inician la interacción con la aplicación (por ejemplo, controladores de API, interfaces de usuario). Definen cómo la aplicación es impulsada por el exterior.
+     - **Puertos Secundarios (Driven Ports):** Utilizados por la aplicación para interactuar con servicios externos (por ejemplo, bases de datos, servicios de mensajería, APIs de terceros). Definen cómo la aplicación impulsa a los servicios externos.
 
-3.  **Adaptadores:**
-    *   Son implementaciones concretas de los puertos.
-    *   Se encuentran fuera del dominio y dependen de él.
-    *   Traducen la comunicación entre el formato específico de una tecnología externa y el formato requerido por los puertos del dominio.
-    *   Ejemplos de adaptadores:
-        *   **Adaptadores Primarios (Driving Adapters):** Controladores REST, adaptadores de GraphQL, clientes de línea de comandos.
-        *   **Adaptadores Secundarios (Driven Adapters):** Adaptadores de base de datos (ORM, JDBC), clientes HTTP para APIs externas, adaptadores de colas de mensajes.
+3. **Adaptadores:**
+   - Son implementaciones concretas de los puertos.
+   - Existen dos tipos principales de adaptadores, correspondientes a los dos tipos de puertos:
+     - **Adaptadores Primarios (Driving Adapters):** Implementan los puertos primarios. Ejemplos:
+       - Controladores de API REST
+       - Controladores GraphQL
+       - Interfaces de línea de comandos (CLI)
+       - Interfaces de usuario web o móvil
+     - **Adaptadores Secundarios (Driven Adapters):** Implementan los puertos secundarios. Ejemplos:
+       - Implementaciones de repositorios para bases de datos (PostgreSQL, MongoDB, etc.)
+       - Clientes para servicios externos (APIs de pago, servicios de correo, etc.)
+       - Clientes de mensajería (RabbitMQ, Kafka, etc.)
 
 ### Diagrama de la Arquitectura
+
+```mermaid
+graph TD
+    subgraph External
+        A[Cliente HTTP] -->|Solicitud| B[API REST]
+        B -->|Respuesta| A
+        C[Base de Datos] -->|Datos| D[Repositorio]
+        D -->|Consulta| C
+    end
+    
+    subgraph Application
+        B -->|Traduce| E[Controlador]
+        E -->|Usa| F[Servicio de Aplicación]
+        F -->|Depende| G[Puertos Primarios]
+        F -->|Usa| H[Repositorio]
+        H -->|Implementa| I[Puertos Secundarios]
+    end
+    
+    subgraph Domain
+        J[Entidades]
+        K[Reglas de Negocio]
+        G --> J
+        G --> K
+        I --> J
+    end
+```
 
 ```mermaid
 graph TD
@@ -183,7 +214,6 @@ export class TaskController {
     // ... implementación similar ...
   }
 }
-*/
 ```
 
 **3. Composición (Ejemplo):**
@@ -225,6 +255,8 @@ app.listen(3000, () => console.log('Server running on port 3000'));
 *   **Complejidad Inicial:** Puede parecer más complejo de configurar inicialmente en comparación con arquitecturas más simples como MVC.
 *   **Mayor Número de Clases/Interfaces:** La abstracción a través de puertos puede llevar a un mayor número de artefactos de código.
 *   **Curva de Aprendizaje:** El equipo necesita entender los principios de la arquitectura para aplicarla correctamente.
+*   **Tiempo de Desarrollo Inicial:** Puede llevar más tiempo configurar la arquitectura.
+*   **Posible Sobreingeniería:** Puede ser excesiva para aplicaciones pequeñas.
 
 ## Caso Práctico
 

@@ -2,7 +2,7 @@
   "title": "Clean Code: Principios Fundamentales para un Desarrollo Sostenible",
   "description": "Explora los principios esenciales para escribir código limpio, mantenible y eficiente, con ejemplos antes/después y mejores prácticas.",
   "tags": ["clean code", "buenas practicas", "desarrollo de software", "refactoring", "calidad de codigo"],
-  "image": "/articles/clean-code/images/portada.jpg",
+  "image": "/articles/clean-code/images/portada.png",
   "readTime": "12 min",
   "publicationDate": "2024-07-27",
   "slug": "clean-code"

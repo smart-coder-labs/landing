@@ -2,13 +2,25 @@ import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { useLocation } from 'react-router-dom';
 
-// Helper component to scroll to top on route change
+// Helper component to handle scroll to top and hash-based navigation
 const ScrollToTop = () => {
-  const { pathname } = React.useLocation();
+  const { pathname, hash } = useLocation();
+  
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    // If there's a hash, scroll to the element with that ID
+    if (hash) {
+      const element = document.getElementById(hash.substring(1));
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      // Otherwise scroll to top
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
   return null;
 };
 

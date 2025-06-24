@@ -81,7 +81,7 @@ const ArticlePage: React.FC = () => {
   }
 
   return (
-    <article className="container mx-auto px-4 py-12 max-w-4xl dark:text-slate-200">
+    <article className="container mx-auto px-4 py-12 max-w-4xl dark:text-slate-200 mt-8">
       <header className="mb-8 border-b dark:border-slate-700 pb-8">
         <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-white mb-4 leading-tight">{metadata.title}</h1>
         <div className="text-slate-500 dark:text-slate-400 text-sm mb-2">
@@ -108,31 +108,53 @@ const ArticlePage: React.FC = () => {
       </header>
 
       <div className="prose prose-lg dark:prose-invert max-w-none mx-auto
+                      prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
+                      prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
                       prose-headings:text-slate-800 dark:prose-headings:text-slate-100
+                      prose-p:my-4 prose-p:leading-relaxed
+                      prose-ul:my-4 prose-ol:my-4
+                      prose-li:my-2
                       prose-a:text-teal-600 dark:prose-a:text-teal-400 hover:prose-a:text-teal-700 dark:hover:prose-a:text-teal-500
                       prose-strong:text-slate-800 dark:prose-strong:text-slate-100
-                      prose-blockquote:border-l-teal-500 dark:prose-blockquote:border-l-teal-400
-                      prose-code:bg-slate-200 dark:prose-code:bg-slate-700 prose-code:p-1 prose-code:rounded prose-code:text-sm
-                      prose-img:rounded-lg prose-img:shadow-md">
+                      prose-blockquote:border-l-4 prose-blockquote:border-l-teal-500 dark:prose-blockquote:border-l-teal-400
+                      prose-blockquote:pl-4 prose-blockquote:py-1 prose-blockquote:my-6
+                      prose-code:bg-slate-200 dark:prose-code:bg-slate-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
+                      prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
+                      prose-img:rounded-lg prose-img:shadow-md prose-img:my-8">
         <ReactMarkdown
           children={content}
           remarkPlugins={[remarkGfm]}
           components={{
-            code({node, inline, className, children, ...props}) {
-              const match = /language-(\w+)/.exec(className || '')
-              return !inline && match ? (
-                <SyntaxHighlighter
-                  children={String(children).replace(/\n$/, '')}
-                  style={materialDark} // Choose your style for dark mode
-                  language={match[1]}
-                  PreTag="div"
-                  {...props}
-                />
-              ) : (
-                <code className={className} {...props}>
-                  {children}
-                </code>
-              )
+            code({node, className, children, ...props}: any) {
+              const match = /language-(\w+)/.exec(className || '');
+              const isInline = !className?.includes('language-');
+              
+              if (isInline) {
+                return (
+                  <code className={className} {...props}>
+                    {children}
+                  </code>
+                );
+              }
+              
+              if (match) {
+                return (
+                  <SyntaxHighlighter
+                    style={materialDark as any}
+                    language={match[1]}
+                    PreTag="div"
+                    {...props}
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                );
+              }
+              
+              return (
+                <pre className={className} {...props}>
+                  <code>{children}</code>
+                </pre>
+              );
             }
           }}
         />

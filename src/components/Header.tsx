@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,18 +58,18 @@ const Header: React.FC = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
-          <a href="#about" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors">
+          <Link to="/#about" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors" onClick={() => window.scrollTo(0, 0)}>
             Acerca de
-          </a>
-          <a href="#blog" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors">
+          </Link>
+          <Link to="/#blog" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors" onClick={() => window.scrollTo(0, 0)}>
             Blog
-          </a>
-          <a href="#services" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors">
+          </Link>
+          <Link to="/#services" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors" onClick={() => window.scrollTo(0, 0)}>
             Servicios
-          </a>
-          <a href="#contact" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors">
+          </Link>
+          <Link to="/#contact" className="hover:text-teal-600 dark:hover:text-teal-500 transition-colors" onClick={() => window.scrollTo(0, 0)}>
             Contacto
-          </a>
+          </Link>
           <button 
             onClick={toggleDarkMode}
             className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
@@ -101,34 +102,46 @@ const Header: React.FC = () => {
       {isMenuOpen && (
         <div className="md:hidden bg-white dark:bg-slate-900 shadow-lg">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <a 
-              href="#about" 
-              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors"
-              onClick={toggleMenu}
+            <Link 
+              to="/#about" 
+              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors block"
+              onClick={() => {
+                toggleMenu();
+                window.scrollTo(0, 0);
+              }}
             >
               Acerca de
-            </a>
-            <a 
-              href="#blog" 
-              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors"
-              onClick={toggleMenu}
+            </Link>
+            <Link 
+              to="/#blog" 
+              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors block"
+              onClick={() => {
+                toggleMenu();
+                window.scrollTo(0, 0);
+              }}
             >
               Blog
-            </a>
-            <a 
-              href="#services" 
-              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors"
-              onClick={toggleMenu}
+            </Link>
+            <Link 
+              to="/#services" 
+              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors block"
+              onClick={() => {
+                toggleMenu();
+                window.scrollTo(0, 0);
+              }}
             >
               Servicios
-            </a>
-            <a 
-              href="#contact" 
-              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors"
-              onClick={toggleMenu}
+            </Link>
+            <Link 
+              to="/#contact" 
+              className="py-2 hover:text-teal-600 dark:hover:text-teal-500 transition-colors block"
+              onClick={() => {
+                toggleMenu();
+                window.scrollTo(0, 0);
+              }}
             >
               Contacto
-            </a>
+            </Link>
             <p className="text-sm text-slate-600 dark:text-slate-400 italic pt-2 border-t border-slate-200 dark:border-slate-800">
               "Codificando el futuro con inteligencia"
             </p>
