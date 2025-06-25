@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import rehypeRaw from 'rehype-raw';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism'; // Choose a style
+import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Link } from 'react-router-dom';
+// Animaciones podrían agregarse más adelante si son necesarias
 
 interface BlogPostMetadata {
   title: string;
@@ -107,31 +110,61 @@ const ArticlePage: React.FC = () => {
         )}
       </header>
 
-      <div className="prose prose-lg dark:prose-invert max-w-none mx-auto
-                      prose-headings:font-bold prose-headings:mt-8 prose-headings:mb-4
-                      prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl
-                      prose-headings:text-slate-800 dark:prose-headings:text-slate-100
-                      prose-p:my-4 prose-p:leading-relaxed
-                      prose-ul:my-4 prose-ol:my-4
-                      prose-li:my-2
-                      prose-a:text-teal-600 dark:prose-a:text-teal-400 hover:prose-a:text-teal-700 dark:hover:prose-a:text-teal-500
-                      prose-strong:text-slate-800 dark:prose-strong:text-slate-100
-                      prose-blockquote:border-l-4 prose-blockquote:border-l-teal-500 dark:prose-blockquote:border-l-teal-400
-                      prose-blockquote:pl-4 prose-blockquote:py-1 prose-blockquote:my-6
-                      prose-code:bg-slate-200 dark:prose-code:bg-slate-700 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-sm
-                      prose-pre:bg-slate-800 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto
-                      prose-img:rounded-lg prose-img:shadow-md prose-img:my-8">
+      <div className="max-w-4xl mx-auto">
         <ReactMarkdown
-          children={content}
           remarkPlugins={[remarkGfm]}
+          rehypePlugins={[rehypeRaw]}
           components={{
-            code({node, className, children, ...props}: any) {
+            // Encabezados
+            h1: ({node, ...props}) => (
+              <h1 className="text-4xl font-bold text-slate-900 dark:text-white mt-12 mb-6 pb-2 border-b border-slate-200 dark:border-slate-700" {...props} />
+            ),
+            h2: ({node, ...props}) => (
+              <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100 mt-10 mb-4 pt-4" {...props} />
+            ),
+            h3: ({node, ...props}) => (
+              <h3 className="text-2xl font-semibold text-slate-800 dark:text-slate-100 mt-8 mb-3" {...props} />
+            ),
+            h4: ({node, ...props}) => (
+              <h4 className="text-xl font-semibold text-slate-800 dark:text-slate-100 mt-6 mb-2" {...props} />
+            ),
+            // Párrafos
+            p: ({node, ...props}) => (
+              <p className="text-slate-700 dark:text-slate-300 text-lg leading-relaxed my-6" {...props} />
+            ),
+            // Enlaces
+            a: ({node, ...props}) => (
+              <a 
+                className="text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium transition-colors underline underline-offset-4" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                {...props}
+              />
+            ),
+            // Listas
+            ul: ({node, ...props}) => (
+              <ul className="list-disc pl-6 my-4 space-y-2 text-slate-700 dark:text-slate-300" {...props} />
+            ),
+            ol: ({node, ...props}) => (
+              <ol className="list-decimal pl-6 my-4 space-y-2 text-slate-700 dark:text-slate-300" {...props} />
+            ),
+            li: ({node, ...props}) => (
+              <li className="pl-2" {...props} />
+            ),
+            // Citas
+            blockquote: ({node, ...props}) => (
+              <blockquote 
+                className="border-l-4 border-teal-500 dark:border-teal-400 pl-4 py-2 my-6 bg-slate-50 dark:bg-slate-800 rounded-r-lg italic"
+                {...props} 
+              />
+            ),
+            // Código en línea
+            code({node, inline, className, children, ...props}: any) {
               const match = /language-(\w+)/.exec(className || '');
-              const isInline = !className?.includes('language-');
               
-              if (isInline) {
+              if (inline) {
                 return (
-                  <code className={className} {...props}>
+                  <code className="bg-slate-200 dark:bg-slate-700 px-1.5 py-0.5 rounded text-sm font-mono text-slate-800 dark:text-slate-200" {...props}>
                     {children}
                   </code>
                 );
@@ -139,25 +172,91 @@ const ArticlePage: React.FC = () => {
               
               if (match) {
                 return (
-                  <SyntaxHighlighter
-                    style={materialDark as any}
-                    language={match[1]}
-                    PreTag="div"
-                    {...props}
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
+                  <div className="my-6 rounded-lg overflow-hidden shadow-lg">
+                    <div className="bg-slate-800 text-slate-300 px-4 py-2 text-sm font-mono flex justify-between items-center">
+                      <span>{match[1]}</span>
+                      <button 
+                        className="text-slate-400 hover:text-white"
+                        onClick={() => {
+                          navigator.clipboard.writeText(String(children).replace(/\n$/, ''));
+                        }}
+                      >
+                        Copiar
+                      </button>
+                    </div>
+                    <SyntaxHighlighter
+                      style={materialDark as any}
+                      language={match[1]}
+                      PreTag="div"
+                      customStyle={{ 
+                        margin: 0, 
+                        borderRadius: 0,
+                        borderBottomLeftRadius: '0.5rem',
+                        borderBottomRightRadius: '0.5rem'
+                      }}
+                      {...props}
+                    >
+                      {String(children).replace(/\n$/, '')}
+                    </SyntaxHighlighter>
+                  </div>
                 );
               }
               
               return (
-                <pre className={className} {...props}>
-                  <code>{children}</code>
+                <pre className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg my-6 overflow-x-auto">
+                  <code className="text-sm" {...props}>
+                    {children}
+                  </code>
                 </pre>
               );
-            }
+            },
+            // Imágenes
+            img: ({node, ...props}) => (
+              <div className="my-8 flex justify-center">
+                <img 
+                  className="rounded-lg shadow-xl max-w-full h-auto max-h-[500px] object-contain" 
+                  alt={props.alt || ''} 
+                  {...props} 
+                />
+              </div>
+            ),
+            // Tablas
+            table: ({node, ...props}) => (
+              <div className="overflow-x-auto my-6">
+                <table className="min-w-full divide-y divide-slate-200 dark:divide-slate-700" {...props} />
+              </div>
+            ),
+            thead: ({node, ...props}) => (
+              <thead className="bg-slate-50 dark:bg-slate-800" {...props} />
+            ),
+            tbody: ({node, ...props}) => (
+              <tbody className="divide-y divide-slate-200 dark:divide-slate-700" {...props} />
+            ),
+            tr: ({node, ...props}) => (
+              <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50" {...props} />
+            ),
+            th: ({node, ...props}) => (
+              <th className="px-6 py-3 text-left text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider" {...props} />
+            ),
+            td: ({node, ...props}) => (
+              <td className="px-6 py-4 text-sm text-slate-700 dark:text-slate-300" {...props} />
+            ),
           }}
-        />
+        >
+          {content}
+        </ReactMarkdown>
+        
+        <div className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+          <Link 
+            to="/#blog" 
+            className="inline-flex items-center text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 font-medium transition-colors"
+          >
+            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Volver al blog
+          </Link>
+        </div>
       </div>
     </article>
   );
