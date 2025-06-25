@@ -1,0 +1,9 @@
+{
+  "title": "Introducción práctica a los Transformers en NLP",
+  "description": "Una guía paso a paso para comprender y aplicar modelos de transformers en procesamiento de lenguaje natural, incluyendo el mecanismo de atención y ejemplos.",
+  "tags": ["nlp", "transformers", "ia", "inteligencia artificial", "machine learning", "atencion"],
+  "image": "/articles/transformers-nlp/images/portada.png",
+  "readTime": "15 min",
+  "publicationDate": "2024-07-28",
+  "slug": "transformers-nlp"
+}
