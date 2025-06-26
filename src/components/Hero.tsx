@@ -10,7 +10,7 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-100 via-white to-slate-200 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 overflow-hidden">
       {/* Animated Background */}
       <div className="absolute inset-0">
         <div className="absolute inset-0 bg-grid-slate-200 dark:bg-grid-slate-800 bg-[size:40px_40px] opacity-20"></div>
@@ -43,15 +43,15 @@ const Hero: React.FC = () => {
             <h1 className="text-6xl md:text-8xl font-bold tracking-tight animate-gradient bg-gradient-to-r from-teal-600 via-blue-600 to-teal-600 dark:from-teal-500 dark:via-blue-500 dark:to-teal-500 bg-clip-text text-transparent bg-[size:200%_200%]">
               SmartCoderLabs
             </h1>
-            <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-teal-500/20 to-blue-500/20 rounded-full blur-xl animate-pulse"></div>
-            <div className="absolute -bottom-8 -left-8 w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full blur-xl animate-pulse delay-300"></div>
+            <div className="absolute -top-8 -right-8 w-16 h-16 bg-gradient-to-br from-teal-500/30 to-blue-500/30 rounded-full blur-xl animate-pulse"></div>
+            <div className="absolute -bottom-8 -left-8 w-16 h-16 bg-gradient-to-br from-blue-500/30 to-purple-500/30 rounded-full blur-xl animate-pulse delay-300"></div>
           </div>
           
-          <p className="text-2xl md:text-3xl mb-8 bg-gradient-to-r from-slate-700 to-slate-900 dark:from-slate-300 dark:to-white bg-clip-text text-transparent font-medium">
+          <p className="text-2xl md:text-3xl mb-8 bg-gradient-to-r from-slate-800 to-slate-900 dark:from-slate-300 dark:to-white bg-clip-text text-transparent font-medium">
             Codificando el futuro con inteligencia
           </p>
           
-          <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-slate-700 dark:text-slate-300 leading-relaxed">
+          <p className="text-lg md:text-xl mb-12 max-w-2xl mx-auto text-slate-800 dark:text-slate-300 leading-relaxed font-medium">
             Explorando la intersección entre la ingeniería de software, 
             la inteligencia artificial y las mejores prácticas de desarrollo.
           </p>
@@ -82,10 +82,10 @@ const Hero: React.FC = () => {
               { icon: <Blocks size={24} />, label: 'Architecture' },
               { icon: <Sparkles size={24} />, label: 'Quality' }
             ].map((item, index) => (
-              <div key={index} className="glass p-4 rounded-xl animate-float" style={{ animationDelay: `${index * 150}ms` }}>
+              <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm p-4 rounded-xl animate-float border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow" style={{ animationDelay: `${index * 150}ms` }}>
                 <div className="flex flex-col items-center gap-2">
                   <div className="text-teal-600 dark:text-teal-500">{item.icon}</div>
-                  <span className="text-xs font-medium text-slate-600 dark:text-slate-400">{item.label}</span>
+                  <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{item.label}</span>
                 </div>
               </div>
             ))}
