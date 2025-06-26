@@ -2,7 +2,7 @@
 title: "Clean Code: Principios Fundamentales para un Desarrollo Sostenible"
 image: "/articles/clean-code/images/portada.jpg"
 readTime: "12 min"
-publicationDate: "2024-07-27"
+publicationDate: "2024-06-22"
 ---
 
 ## Introducción

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Code, Database, Blocks, Braces, Server, Cpu } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Code, Database, Blocks, Braces, Server, Cpu, GitBranch, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface TechItem {
   icon: React.ReactNode;
@@ -9,6 +9,7 @@ interface TechItem {
 }
 
 const techStack: TechItem[] = [
+  // Frontend
   {
     icon: <Code size={24} />,
     name: 'React',
@@ -16,39 +17,266 @@ const techStack: TechItem[] = [
     category: 'Frontend'
   },
   {
-    icon: <Database size={24} />,
-    name: 'Supabase',
-    description: 'Backend as a Service con PostgreSQL, autenticación y tiempo real',
-    category: 'Backend'
-  },
-  {
     icon: <Blocks size={24} />,
     name: 'Next.js',
     description: 'Framework React para aplicaciones web productivas y escalables',
-    category: 'Framework'
+    category: 'Frontend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Tailwind CSS',
+    description: 'Framework de utilidades CSS para diseños personalizados rápidos',
+    category: 'Frontend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Remix',
+    description: 'Framework web full stack con enrutamiento y carga de datos integrados',
+    category: 'Frontend'
+  },
+  
+  // Backend
+  {
+    icon: <Server size={24} />,
+    name: 'Node.js',
+    description: 'Entorno de ejecución de JavaScript del lado del servidor',
+    category: 'Backend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'NestJS',
+    description: 'Framework progresivo de Node.js para aplicaciones del lado del servidor',
+    category: 'Backend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Express.js',
+    description: 'Framework web rápido y minimalista para Node.js',
+    category: 'Backend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'GraphQL',
+    description: 'Lenguaje de consulta y manipulación de datos para APIs',
+    category: 'Backend'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Apollo',
+    description: 'Plataforma para construir una capa de datos unificada',
+    category: 'Backend'
+  },
+  
+  // Databases
+  {
+    icon: <Database size={24} />,
+    name: 'MongoDB',
+    description: 'Base de datos NoSQL orientada a documentos',
+    category: 'Base de Datos'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'MySQL',
+    description: 'Sistema de gestión de bases de datos relacional',
+    category: 'Base de Datos'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'DynamoDB',
+    description: 'Base de datos NoSQL de AWS de alto rendimiento',
+    category: 'Base de Datos'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Redis',
+    description: 'Almacén de estructura de datos en memoria',
+    category: 'Base de Datos'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Cassandra',
+    description: 'Base de datos NoSQL distribuida',
+    category: 'Base de Datos'
+  },
+  
+  // DevOps
+  {
+    icon: <Cpu size={24} />,
+    name: 'Docker',
+    description: 'Plataforma para desarrollar, enviar y ejecutar aplicaciones en contenedores',
+    category: 'DevOps'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Terraform',
+    description: 'Herramienta de infraestructura como código',
+    category: 'DevOps'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'AWS',
+    description: 'Servicios en la nube de Amazon',
+    category: 'DevOps'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'GitHub CI/CD',
+    description: 'Integración y despliegue continuo con GitHub',
+    category: 'DevOps'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Serverless',
+    description: 'Arquitectura de aplicaciones sin servidor',
+    category: 'DevOps'
+  },
+  
+  // Testing
+  {
+    icon: <Cpu size={24} />,
+    name: 'Jest',
+    description: 'Marco de pruebas de JavaScript',
+    category: 'Testing'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Cypress',
+    description: 'Herramienta de pruebas frontend',
+    category: 'Testing'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Mocha',
+    description: 'Marco de pruebas de JavaScript',
+    category: 'Testing'
+  },
+  
+  // Herramientas
+  {
+    icon: <GitBranch size={24} />,
+    name: 'Git',
+    description: 'Sistema de control de versiones distribuido',
+    category: 'Herramientas'
+  },
+  {
+    icon: <Cpu size={24} />,
+    name: 'Swagger',
+    description: 'Herramienta para documentación de APIs',
+    category: 'Herramientas'
   },
   {
     icon: <Braces size={24} />,
     name: 'TypeScript',
     description: 'JavaScript con tipos estáticos para código más seguro y mantenible',
-    category: 'Language'
-  },
-  {
-    icon: <Server size={24} />,
-    name: 'Python',
-    description: 'Lenguaje versátil para backend, ciencia de datos e IA',
-    category: 'Language'
+    category: 'Lenguaje'
   },
   {
     icon: <Cpu size={24} />,
-    name: 'TensorFlow',
-    description: 'Biblioteca de código abierto para machine learning e IA',
-    category: 'AI/ML'
+    name: 'Python',
+    description: 'Lenguaje versátil para backend, ciencia de datos e IA',
+    category: 'Lenguaje'
   }
 ];
 
 const TechStackSection: React.FC = () => {
   const [hoveredTech, setHoveredTech] = useState<string | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(6);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [isLeftHovered, setIsLeftHovered] = useState(false);
+  const [isRightHovered, setIsRightHovered] = useState(false);
+  const [isClicking, setIsClicking] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Calculate total pages based on number of items and items per page
+  const totalPages = Math.ceil(techStack.length / itemsPerPage);
+  
+  // Calculate if arrows should be visible
+  const showLeftArrow = currentIndex > 0;
+  const showRightArrow = currentIndex < totalPages - 1;
+
+  // Handle window resize to adjust items per page
+  useEffect(() => {
+    const updateItemsPerPage = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setItemsPerPage(2);
+      } else if (width < 768) {
+        setItemsPerPage(3);
+      } else if (width < 1024) {
+        setItemsPerPage(4);
+      } else if (width < 1280) {
+        setItemsPerPage(5);
+      } else {
+        setItemsPerPage(6);
+      }
+    };
+
+    window.addEventListener('resize', updateItemsPerPage);
+    updateItemsPerPage();
+    return () => window.removeEventListener('resize', updateItemsPerPage);
+  }, []);
+
+  const handleArrowClick = (direction: 'prev' | 'next') => {
+    if (isAnimating) return;
+    
+    // Click animation
+    setIsClicking(true);
+    setTimeout(() => setIsClicking(false), 150);
+    
+    // Slide animation
+    setIsAnimating(true);
+    if (direction === 'next') {
+      setCurrentIndex(prev => (prev === totalPages - 1 ? 0 : prev + 1));
+    } else {
+      setCurrentIndex(prev => (prev === 0 ? totalPages - 1 : prev - 1));
+    }
+    
+    // Reset animation state
+    setTimeout(() => setIsAnimating(false), 500);
+  };
+
+  const animateSlide = (direction: 'next' | 'prev') => {
+    if (isAnimating) return;
+    
+    setIsAnimating(true);
+    
+    if (direction === 'next') {
+      setCurrentIndex(prev => (prev === totalPages - 1 ? 0 : prev + 1));
+    } else {
+      setCurrentIndex(prev => (prev === 0 ? totalPages - 1 : prev - 1));
+    }
+    
+    // Reset animation state after transition
+    setTimeout(() => setIsAnimating(false), 500);
+  };
+
+  const nextSlide = () => animateSlide('next');
+  const prevSlide = () => animateSlide('prev');
+
+  // Prevent wheel event from bubbling up to prevent accidental scrolling
+  const handleWheel = (e: React.WheelEvent) => {
+    // Only prevent default if the wheel event is on the carousel container
+    if (e.currentTarget === e.target) {
+      e.preventDefault();
+    }
+  };
+
+  // Calculate the current items to display
+  const currentItems = techStack.slice(
+    currentIndex * itemsPerPage,
+    (currentIndex * itemsPerPage) + itemsPerPage
+  );
+
+  // Auto-advance slides
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (!isAnimating) {
+        nextSlide();
+      }
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [currentIndex, isAnimating]);
 
   return (
     <section className="py-20 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
@@ -59,7 +287,7 @@ const TechStackSection: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-12">
           <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
             Stack Tecnológico <span className="text-teal-600 dark:text-teal-500">Confiable y Moderno</span>
           </h2>
@@ -67,42 +295,116 @@ const TechStackSection: React.FC = () => {
             Utilizamos las mejores herramientas y tecnologías para crear soluciones robustas y escalables
           </p>
         </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
-          {techStack.map((tech, index) => (
-            <div
-              key={tech.name}
-              className="relative group"
-              onMouseEnter={() => setHoveredTech(tech.name)}
-              onMouseLeave={() => setHoveredTech(null)}
+        
+        <div 
+          className="relative mb-16"
+          onWheel={handleWheel}
+        >
+          {/* Left Arrow - Only show if not on first page */}
+          {showLeftArrow && (
+            <button 
+              onClick={() => handleArrowClick('prev')}
+              onMouseEnter={() => setIsLeftHovered(true)}
+              onMouseLeave={() => setIsLeftHovered(false)}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg transition-all duration-300 
+                ${isLeftHovered ? 'scale-110 bg-teal-50 dark:bg-slate-700 shadow-xl' : 'scale-100'}
+                ${isClicking ? 'scale-95' : ''}
+                border border-slate-200 dark:border-slate-700 text-teal-600 dark:text-teal-400
+                transform hover:scale-110 active:scale-95`}
+              aria-label="Anterior"
             >
-              <div className="h-full bg-white dark:bg-slate-800 rounded-xl p-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                <div className="text-teal-600 dark:text-teal-500 mb-3 transform group-hover:scale-110 transition-transform duration-300">
-                  {tech.icon}
+              <ChevronLeft 
+                className={`w-6 h-6 transition-transform duration-300 ${
+                  isLeftHovered ? 'translate-x-[-2px]' : ''
+                }`} 
+              />
+            </button>
+          )}
+          
+          <div 
+            ref={containerRef}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 touch-none"
+            style={{
+              // Prevent iOS momentum scrolling
+              WebkitOverflowScrolling: 'touch',
+              // Prevent text selection during drag
+              userSelect: 'none',
+              // Prevent blue highlight on tap (mobile)
+              WebkitTapHighlightColor: 'transparent',
+            }}
+          >
+            {currentItems.map((tech) => (
+              <div
+                key={tech.name}
+                className="relative group"
+                onMouseEnter={() => setHoveredTech(tech.name)}
+                onMouseLeave={() => setHoveredTech(null)}
+              >
+                <div className="h-full bg-white dark:bg-slate-800 rounded-xl p-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+                  <div className="text-teal-600 dark:text-teal-500 mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                    {tech.icon}
+                  </div>
+                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1 text-center">
+                    {tech.name}
+                  </h3>
+                  <span className="text-xs text-slate-600 dark:text-slate-400 text-center">
+                    {tech.category}
+                  </span>
                 </div>
-                <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1">
-                  {tech.name}
-                </h3>
-                <span className="text-xs text-slate-600 dark:text-slate-400">
-                  {tech.category}
-                </span>
+                
+                {/* Tooltip */}
+                {hoveredTech === tech.name && (
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-10 transition-opacity duration-300">
+                    <p className="text-xs text-slate-700 dark:text-slate-300">
+                      {tech.description}
+                    </p>
+                  </div>
+                )}
               </div>
-              
-              {/* Tooltip */}
-              {hoveredTech === tech.name && (
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-10">
-                  <p className="text-xs text-slate-700 dark:text-slate-300">
-                    {tech.description}
-                  </p>
-                </div>
-              )}
-            </div>
+            ))}
+          </div>
+          
+          {/* Right Arrow - Only show if not on last page */}
+          {showRightArrow && (
+            <button 
+              onClick={() => handleArrowClick('next')}
+              onMouseEnter={() => setIsRightHovered(true)}
+              onMouseLeave={() => setIsRightHovered(false)}
+              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg transition-all duration-300 
+                ${isRightHovered ? 'scale-110 bg-teal-50 dark:bg-slate-700 shadow-xl' : 'scale-100'}
+                ${isClicking ? 'scale-95' : ''}
+                border border-slate-200 dark:border-slate-700 text-teal-600 dark:text-teal-400
+                transform hover:scale-110 active:scale-95`}
+              aria-label="Siguiente"
+            >
+              <ChevronRight 
+                className={`w-6 h-6 transition-transform duration-300 ${
+                  isRightHovered ? 'translate-x-[2px]' : ''
+                }`} 
+              />
+            </button>
+          )}
+        </div>
+        
+        {/* Dots indicator with animation */}
+        <div className="flex justify-center mt-8 space-x-2 mb-16">
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => !isAnimating && setCurrentIndex(index)}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentIndex 
+                  ? 'bg-teal-600 dark:bg-teal-500 w-8 scale-110' 
+                  : 'bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500 scale-90 hover:scale-100'
+              }`}
+              aria-label={`Ir a la página ${index + 1}`}
+            />
           ))}
         </div>
 
         {/* Lead Generation Offer */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-200 dark:border-slate-700 transform transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="md:w-2/3">
                 <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
@@ -113,24 +415,24 @@ const TechStackSection: React.FC = () => {
                 </p>
                 <ul className="space-y-3">
                   <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2"></div>
+                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse"></div>
                     Análisis de arquitectura y patrones de diseño
                   </li>
                   <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2"></div>
+                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse delay-100"></div>
                     Revisión de seguridad y rendimiento
                   </li>
                   <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2"></div>
+                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse delay-200"></div>
                     Recomendaciones de mejores prácticas
                   </li>
                 </ul>
               </div>
               
-              <div className="md:w-1/3">
+              <div className="md:w-1/3 w-full">
                 <a 
                   href="#contact"
-                  className="block w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500 text-white text-center rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+                  className="block w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500 text-white text-center rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:shadow-teal-500/30 active:translate-y-0.5 active:shadow-inner"
                 >
                   Solicitar Diagnóstico Gratuito
                 </a>
@@ -139,6 +441,17 @@ const TechStackSection: React.FC = () => {
           </div>
         </div>
       </div>
+      
+      {/* Animation keyframes */}
+      <style>{`
+        @keyframes bounce-horizontal {
+          0%, 100% { transform: translateX(0); }
+          50% { transform: translateX(5px); }
+        }
+        .animate-bounce-horizontal {
+          animation: bounce-horizontal 1s infinite;
+        }
+      `}</style>
     </section>
   );
 };

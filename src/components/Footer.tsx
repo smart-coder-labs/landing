@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
           
           <div className="flex items-center">
             <span className="flex items-center">
-              Hecho con <Heart size={14} className="text-red-500 mx-1" /> en España
+              Hecho con <Heart size={14} className="text-red-500 mx-1" /> en Colombia
             </span>
           </div>
         </div>

@@ -48,9 +48,9 @@ const Header: React.FC = () => {
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-2xl font-bold text-teal-600 dark:text-teal-500">
-            SmartCoderLabs
-          </h1>
+          <Link to="/" className="text-2xl font-bold text-teal-600 dark:text-teal-500">
+              SmartCoderLabs
+          </Link>
           <p className="hidden md:block ml-4 text-sm text-slate-600 dark:text-slate-400 italic">
             "Codificando el futuro con inteligencia"
           </p>

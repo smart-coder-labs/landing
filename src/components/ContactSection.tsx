@@ -58,7 +58,7 @@ const ContactSection: React.FC = () => {
           </h2>
           <p className="text-lg max-w-2xl mx-auto text-slate-700 dark:text-slate-300">
             ¿Tienes alguna pregunta o quieres colaborar en un proyecto? 
-            Envíame un mensaje y me pondré en contacto contigo pronto.
+            Envíanos un mensaje y nos pondremos en contacto contigo pronto.
           </p>
         </div>
 
@@ -88,7 +88,7 @@ const ContactSection: React.FC = () => {
                 <div>
                   <h4 className="font-medium text-slate-900 dark:text-white mb-1">Ubicación</h4>
                   <p className="text-slate-600 dark:text-slate-400">
-                    Madrid, España
+                    Risaralda, Colombia
                   </p>
                 </div>
               </div>
@@ -108,11 +108,11 @@ const ContactSection: React.FC = () => {
             
             <div className="mt-12">
               <h4 className="font-medium text-slate-900 dark:text-white mb-4">
-                Sígueme en Redes Sociales
+                Síguenos en Redes Sociales
               </h4>
               <div className="flex space-x-4">
                 <a 
-                  href="http://github.com/cr8297408" 
+                  href="https://github.com/smartcoderlabs/" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg text-slate-600 dark:text-slate-400 hover:text-teal-600 dark:hover:text-teal-500 hover:scale-110 transition-all duration-300"

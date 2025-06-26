@@ -66,10 +66,10 @@ const ServicesSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold mb-4 text-slate-900 dark:text-white">
-            Mis <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500">Servicios</span>
+            Nuestros <span className="text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500">Servicios</span>
           </h2>
           <p className="text-lg max-w-2xl mx-auto text-slate-700 dark:text-slate-300">
-            Ofrezco soluciones de alto valor para problemas complejos en el desarrollo 
+            Ofrecemos soluciones de alto valor para problemas complejos en el desarrollo 
             de software y la implementación de tecnologías avanzadas.
           </p>
         </div>
