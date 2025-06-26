@@ -16,10 +16,8 @@ const About: React.FC = () => {
             </p>
             <p className="text-lg mb-8 text-slate-700 dark:text-slate-300">
             Compartimos conocimiento técnico y experiencias del mundo real sobre ingeniería de software, inteligencia artificial, buenas prácticas de desarrollo y arquitectura de sistemas, promoviendo una cultura de calidad, innovación y aprendizaje continuo.
-            </p>
-            <p className="text-lg mb-8 text-slate-700 dark:text-slate-300">
-              Nuestro enfoque se centra en la calidad, la escalabilidad y la aplicación de tecnologías
-              de vanguardia para resolver problemas complejos del mundo real.
+            <br />
+            Nuestro enfoque se centra en la calidad, la escalabilidad y la aplicación de tecnologías de vanguardia para resolver problemas complejos del mundo real.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
@@ -61,7 +59,7 @@ const About: React.FC = () => {
             <div className="relative w-64 h-64 md:w-80 md:h-80">
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500 opacity-20 animate-pulse"></div>
               <img
-                src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                src="/profile.jpeg"
                 alt="SmartCoderLabs Developer"
                 className="rounded-full object-cover w-full h-full border-8 border-white dark:border-slate-800 shadow-xl z-10 relative"
               />
