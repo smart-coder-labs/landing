@@ -1,0 +1,30 @@
+name: Validate Deploy
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        run: npm run github-flb
+
+      - name: Check test result
+        run: |
+          if [ $? -eq 0 ]; then
+            echo "Tests passed"
+          else
+            echo "Tests failed"
+            exit 1
+          fi
+
+      - name: Run Build
+        run: npm run build
