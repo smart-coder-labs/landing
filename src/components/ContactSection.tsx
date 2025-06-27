@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter, Youtube } from 'lucide-react';
+import { Mail, MapPin, Phone, Send, Github, Linkedin, Twitter, Youtube, Loader2 } from 'lucide-react';
+import { supabaseClient } from '../lib';
 
 type FormValues = {
   name: string;
@@ -17,7 +18,8 @@ const ContactSection: React.FC = () => {
   });
   
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [submitError, setSubmitError] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -27,26 +29,27 @@ const ContactSection: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    // Simulate form submission
-    setTimeout(() => {
-      if (formValues.name && formValues.email && formValues.message) {
-        setFormSubmitted(true);
-        setSubmitError(false);
-        
-        // Reset form
-        setFormValues({
-          name: '',
-          email: '',
-          subject: '',
-          message: ''
-        });
-      } else {
-        setSubmitError(true);
+  const handleSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      setLoading(true);
+      const { error } = await supabaseClient.from('contact_messages').insert({
+        full_name: formValues.name,
+        email: formValues.email,
+        subject: formValues.subject,
+        message: formValues.message
+      });
+
+      if (error) {
+        throw error;
       }
-    }, 1000);
+
+      setFormSubmitted(true);
+    } catch (error: any) {
+      setSubmitError("Error al enviar el mensaje. Por favor, intenta de nuevo.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -232,7 +235,7 @@ const ContactSection: React.FC = () => {
                 
                 {submitError && (
                   <div className="mb-6 text-red-600 dark:text-red-500 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg">
-                    Por favor completa todos los campos requeridos.
+                    {submitError}
                   </div>
                 )}
                 
@@ -240,7 +243,13 @@ const ContactSection: React.FC = () => {
                   type="submit"
                   className="px-6 py-3 bg-teal-600 hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600 text-white rounded-lg font-medium flex items-center justify-center transition-colors duration-300"
                 >
-                  <Send size={18} className="mr-2" />
+                  {loading ? (
+                    <div className="inline-flex items-center justify-center w-6 h-6 mr-2">
+                      <Loader2 size={16} className="animate-spin" />
+                    </div>
+                  ) : (
+                    <Send size={18} className="mr-2" />
+                  )}
                   Enviar Mensaje
                 </button>
               </form>
