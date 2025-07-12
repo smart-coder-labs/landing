@@ -34,7 +34,7 @@ const techStack: TechItem[] = [
     description: 'Framework web full stack con enrutamiento y carga de datos integrados',
     category: 'Frontend'
   },
-  
+
   // Backend
   {
     icon: <Server size={24} />,
@@ -66,7 +66,7 @@ const techStack: TechItem[] = [
     description: 'Plataforma para construir una capa de datos unificada',
     category: 'Backend'
   },
-  
+
   // Databases
   {
     icon: <Database size={24} />,
@@ -98,7 +98,7 @@ const techStack: TechItem[] = [
     description: 'Base de datos NoSQL distribuida',
     category: 'Base de Datos'
   },
-  
+
   // DevOps
   {
     icon: <Cpu size={24} />,
@@ -130,7 +130,7 @@ const techStack: TechItem[] = [
     description: 'Arquitectura de aplicaciones sin servidor',
     category: 'DevOps'
   },
-  
+
   // Testing
   {
     icon: <Cpu size={24} />,
@@ -150,7 +150,7 @@ const techStack: TechItem[] = [
     description: 'Marco de pruebas de JavaScript',
     category: 'Testing'
   },
-  
+
   // Herramientas
   {
     icon: <GitBranch size={24} />,
@@ -190,7 +190,7 @@ const TechStackSection: React.FC = () => {
 
   // Calculate total pages based on number of items and items per page
   const totalPages = Math.ceil(techStack.length / itemsPerPage);
-  
+
   // Calculate if arrows should be visible
   const showLeftArrow = currentIndex > 0;
   const showRightArrow = currentIndex < totalPages - 1;
@@ -198,65 +198,53 @@ const TechStackSection: React.FC = () => {
   // Handle window resize to adjust items per page
   useEffect(() => {
     const updateItemsPerPage = () => {
-      const width = window.innerWidth;
-      if (width < 640) {
-        setItemsPerPage(2);
-      } else if (width < 768) {
-        setItemsPerPage(3);
-      } else if (width < 1024) {
-        setItemsPerPage(4);
-      } else if (width < 1280) {
-        setItemsPerPage(5);
-      } else {
+      if (window.innerWidth >= 1280) {
         setItemsPerPage(6);
+      } else if (window.innerWidth >= 1024) {
+        setItemsPerPage(5);
+      } else if (window.innerWidth >= 768) {
+        setItemsPerPage(4);
+      } else if (window.innerWidth >= 640) {
+        setItemsPerPage(3);
+      } else {
+        setItemsPerPage(2);
       }
     };
 
-    window.addEventListener('resize', updateItemsPerPage);
     updateItemsPerPage();
+    window.addEventListener('resize', updateItemsPerPage);
     return () => window.removeEventListener('resize', updateItemsPerPage);
   }, []);
 
   const handleArrowClick = (direction: 'prev' | 'next') => {
     if (isAnimating) return;
-    
-    // Click animation
+
     setIsClicking(true);
     setTimeout(() => setIsClicking(false), 150);
-    
-    // Slide animation
-    setIsAnimating(true);
-    if (direction === 'next') {
-      setCurrentIndex(prev => (prev === totalPages - 1 ? 0 : prev + 1));
-    } else {
-      setCurrentIndex(prev => (prev === 0 ? totalPages - 1 : prev - 1));
+
+    if (direction === 'prev' && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    } else if (direction === 'next' && currentIndex < totalPages - 1) {
+      setCurrentIndex(currentIndex + 1);
     }
-    
-    // Reset animation state
-    setTimeout(() => setIsAnimating(false), 500);
   };
 
   const animateSlide = (direction: 'next' | 'prev') => {
     if (isAnimating) return;
-    
+
     setIsAnimating(true);
-    
-    if (direction === 'next') {
-      setCurrentIndex(prev => (prev === totalPages - 1 ? 0 : prev + 1));
-    } else {
-      setCurrentIndex(prev => (prev === 0 ? totalPages - 1 : prev - 1));
+    setTimeout(() => setIsAnimating(false), 300);
+
+    if (direction === 'next' && currentIndex < totalPages - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else if (direction === 'prev' && currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
     }
-    
-    // Reset animation state after transition
-    setTimeout(() => setIsAnimating(false), 500);
   };
 
   const nextSlide = () => animateSlide('next');
-  const prevSlide = () => animateSlide('prev');
 
-  // Prevent wheel event from bubbling up to prevent accidental scrolling
   const handleWheel = (e: React.WheelEvent) => {
-    // Only prevent default if the wheel event is on the carousel container
     if (e.currentTarget === e.target) {
       e.preventDefault();
     }
@@ -279,49 +267,48 @@ const TechStackSection: React.FC = () => {
   }, [currentIndex, isAnimating]);
 
   return (
-    <section className="py-20 bg-slate-50 dark:bg-slate-800/50 relative overflow-hidden">
+    <section className="py-20 bg-futuristic-dark relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/2 -right-1/2 w-[800px] h-[800px] bg-gradient-radial from-teal-500/10 to-transparent rounded-full"></div>
-        <div className="absolute -bottom-1/2 -left-1/2 w-[800px] h-[800px] bg-gradient-radial from-blue-500/10 to-transparent rounded-full"></div>
+        <div className="absolute -top-1/2 -right-1/2 w-[800px] h-[800px] gradient-primary rounded-full opacity-20"></div>
+        <div className="absolute -bottom-1/2 -left-1/2 w-[800px] h-[800px] gradient-secondary rounded-full opacity-20"></div>
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-slate-900 dark:text-white">
-            Stack Tecnológico <span className="text-teal-600 dark:text-teal-500">Confiable y Moderno</span>
+          <h2 className="text-3xl font-bold mb-4 text-white">
+            Stack Tecnológico <span className="text-gradient">Confiable y Moderno</span>
           </h2>
-          <p className="text-lg max-w-2xl mx-auto text-slate-700 dark:text-slate-300">
+          <p className="text-lg max-w-2xl mx-auto text-slate-300">
             Utilizamos las mejores herramientas y tecnologías para crear soluciones robustas y escalables
           </p>
         </div>
-        
-        <div 
+
+        <div
           className="relative mb-16"
           onWheel={handleWheel}
         >
           {/* Left Arrow - Only show if not on first page */}
           {showLeftArrow && (
-            <button 
+            <button
               onClick={() => handleArrowClick('prev')}
               onMouseEnter={() => setIsLeftHovered(true)}
               onMouseLeave={() => setIsLeftHovered(false)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg transition-all duration-300 
-                ${isLeftHovered ? 'scale-110 bg-teal-50 dark:bg-slate-700 shadow-xl' : 'scale-100'}
+              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
+                ${isLeftHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
                 ${isClicking ? 'scale-95' : ''}
-                border border-slate-200 dark:border-slate-700 text-teal-600 dark:text-teal-400
-                transform hover:scale-110 active:scale-95`}
+                text-blue-400
+                transform hover:scale-110 active:scale-95 focus-futuristic`}
               aria-label="Anterior"
             >
-              <ChevronLeft 
-                className={`w-6 h-6 transition-transform duration-300 ${
-                  isLeftHovered ? 'translate-x-[-2px]' : ''
-                }`} 
+              <ChevronLeft
+                className={`w-6 h-6 transition-transform duration-300 ${isLeftHovered ? 'translate-x-[-2px]' : ''
+                  }`}
               />
             </button>
           )}
-          
-          <div 
+
+          <div
             ref={containerRef}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 touch-none"
             style={{
@@ -340,22 +327,22 @@ const TechStackSection: React.FC = () => {
                 onMouseEnter={() => setHoveredTech(tech.name)}
                 onMouseLeave={() => setHoveredTech(null)}
               >
-                <div className="h-full bg-white dark:bg-slate-800 rounded-xl p-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
-                  <div className="text-teal-600 dark:text-teal-500 mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="h-full glass-card rounded-xl p-6 flex flex-col items-center justify-center hover:animate-glow-pulse transition-all duration-300 transform hover:-translate-y-2">
+                  <div className="text-blue-400 mb-3 transform group-hover:scale-110 transition-transform duration-300">
                     {tech.icon}
                   </div>
-                  <h3 className="text-sm font-semibold text-slate-900 dark:text-white mb-1 text-center">
+                  <h3 className="text-sm font-semibold text-white mb-1 text-center">
                     {tech.name}
                   </h3>
-                  <span className="text-xs text-slate-600 dark:text-slate-400 text-center">
+                  <span className="text-xs text-slate-300 text-center">
                     {tech.category}
                   </span>
                 </div>
-                
+
                 {/* Tooltip */}
                 {hoveredTech === tech.name && (
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 bg-white dark:bg-slate-800 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 z-10 transition-opacity duration-300">
-                    <p className="text-xs text-slate-700 dark:text-slate-300">
+                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 glass-card rounded-lg z-10 transition-opacity duration-300">
+                    <p className="text-xs text-slate-300">
                       {tech.description}
                     </p>
                   </div>
@@ -363,40 +350,38 @@ const TechStackSection: React.FC = () => {
               </div>
             ))}
           </div>
-          
+
           {/* Right Arrow - Only show if not on last page */}
           {showRightArrow && (
-            <button 
+            <button
               onClick={() => handleArrowClick('next')}
               onMouseEnter={() => setIsRightHovered(true)}
               onMouseLeave={() => setIsRightHovered(false)}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 bg-white dark:bg-slate-800 p-3 rounded-full shadow-lg transition-all duration-300 
-                ${isRightHovered ? 'scale-110 bg-teal-50 dark:bg-slate-700 shadow-xl' : 'scale-100'}
+              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
+                ${isRightHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
                 ${isClicking ? 'scale-95' : ''}
-                border border-slate-200 dark:border-slate-700 text-teal-600 dark:text-teal-400
-                transform hover:scale-110 active:scale-95`}
+                text-blue-400
+                transform hover:scale-110 active:scale-95 focus-futuristic`}
               aria-label="Siguiente"
             >
-              <ChevronRight 
-                className={`w-6 h-6 transition-transform duration-300 ${
-                  isRightHovered ? 'translate-x-[2px]' : ''
-                }`} 
+              <ChevronRight
+                className={`w-6 h-6 transition-transform duration-300 ${isRightHovered ? 'translate-x-[2px]' : ''
+                  }`}
               />
             </button>
           )}
         </div>
-        
+
         {/* Dots indicator with animation */}
         <div className="flex justify-center mt-8 space-x-2 mb-16">
           {Array.from({ length: totalPages }).map((_, index) => (
             <button
               key={index}
               onClick={() => !isAnimating && setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentIndex 
-                  ? 'bg-teal-600 dark:bg-teal-500 w-8 scale-110' 
-                  : 'bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 dark:hover:bg-slate-500 scale-90 hover:scale-100'
-              }`}
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                ? 'bg-blue-400 w-8 scale-110 animate-glow-pulse'
+                : 'bg-slate-600 hover:bg-slate-500 scale-90 hover:scale-100'
+                }`}
               aria-label={`Ir a la página ${index + 1}`}
             />
           ))}
@@ -404,35 +389,35 @@ const TechStackSection: React.FC = () => {
 
         {/* Lead Generation Offer */}
         <div className="max-w-4xl mx-auto">
-          <div className="bg-white dark:bg-slate-800 rounded-2xl p-8 shadow-xl border border-slate-200 dark:border-slate-700 transform transition-all duration-300 hover:scale-[1.01] hover:shadow-2xl">
+          <div className="glass-card rounded-2xl p-8 transform transition-all duration-300 hover:scale-[1.01] hover:animate-glow-pulse">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold mb-4 text-slate-900 dark:text-white">
+                <h3 className="text-2xl font-bold mb-4 text-white">
                   ¿Necesitas una auditoría técnica?
                 </h3>
-                <p className="text-slate-600 dark:text-slate-400 mb-6">
+                <p className="text-slate-300 mb-6">
                   Obtén un diagnóstico gratuito de tu arquitectura actual y descubre oportunidades de mejora para tu proyecto.
                 </p>
                 <ul className="space-y-3">
-                  <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse"></div>
+                  <li className="flex items-center text-slate-300">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
                     Análisis de arquitectura y patrones de diseño
                   </li>
-                  <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse delay-100"></div>
+                  <li className="flex items-center text-slate-300">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-100"></div>
                     Revisión de seguridad y rendimiento
                   </li>
-                  <li className="flex items-center text-slate-700 dark:text-slate-300">
-                    <div className="w-2 h-2 bg-teal-500 rounded-full mr-2 animate-pulse delay-200"></div>
+                  <li className="flex items-center text-slate-300">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-200"></div>
                     Recomendaciones de mejores prácticas
                   </li>
                 </ul>
               </div>
-              
+
               <div className="md:w-1/3 w-full">
-                <a 
+                <a
                   href="#contact"
-                  className="block w-full px-6 py-3 bg-gradient-to-r from-teal-600 to-blue-600 dark:from-teal-500 dark:to-blue-500 text-white text-center rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 hover:shadow-teal-500/30 active:translate-y-0.5 active:shadow-inner"
+                  className="btn-futuristic text-white text-center block w-full"
                 >
                   Solicitar Diagnóstico Gratuito
                 </a>
@@ -441,7 +426,7 @@ const TechStackSection: React.FC = () => {
           </div>
         </div>
       </div>
-      
+
       {/* Animation keyframes */}
       <style>{`
         @keyframes bounce-horizontal {
