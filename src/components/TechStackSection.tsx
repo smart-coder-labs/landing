@@ -441,7 +441,7 @@ const TechStackSection: React.FC = () => {
                 </ScrollAnimation>
 
                 <ScrollAnimation animation="slide-right" delay={2.2}>
-                  <div className="md:w-1/3 w-full">
+                  <div className="w-full">
                     <a
                       href="#contact"
                       className="btn-futuristic text-white text-center block w-full"
