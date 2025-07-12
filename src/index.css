@@ -539,3 +539,15 @@ label {
   will-change: transform, opacity;
   backface-visibility: hidden;
 }
+
+/* Animación específica para stack tecnológico */
+.stack-item-animation {
+  opacity: 0;
+  transform: scale(0.8) translateY(20px);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stack-item-animation.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}

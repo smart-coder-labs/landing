@@ -100,9 +100,9 @@ const Hero: React.FC = () => {
               { icon: <Blocks size={24} />, label: 'Architecture', color: 'text-green-400' },
               { icon: <Sparkles size={24} />, label: 'Quality', color: 'text-yellow-400' }
             ].map((item, index) => (
-              <ScrollAnimation key={index} animation="zoom-in" delay={1.0 + index * 0.1} threshold={0.3}>
+              <ScrollAnimation key={index} animation="zoom-in" delay={1.0 + index * 0.1} threshold={0.05} triggerOnce={false}>
                 <div
-                  className="glass-card p-4 rounded-xl animate-float-slow hover:animate-glow-pulse transition-all duration-300"
+                  className="glass-card p-4 rounded-xl animate-float-slow hover:animate-glow-pulse transition-all duration-300 stack-item-animation"
                 >
                   <div className="flex flex-col items-center gap-2">
                     <div className={item.color}>{item.icon}</div>

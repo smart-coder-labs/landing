@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Code, Database, Blocks, Braces, Server, Cpu, GitBranch, ChevronLeft, ChevronRight } from 'lucide-react';
+import ScrollAnimation from './ScrollAnimation';
 
 interface TechItem {
   icon: React.ReactNode;
@@ -275,156 +276,184 @@ const TechStackSection: React.FC = () => {
       </div>
 
       <div className="container mx-auto px-4 relative z-10">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4 text-white">
-            Stack Tecnológico <span className="text-gradient">Confiable y Moderno</span>
-          </h2>
-          <p className="text-lg max-w-2xl mx-auto text-slate-300">
-            Utilizamos las mejores herramientas y tecnologías para crear soluciones robustas y escalables
-          </p>
-        </div>
-
-        <div
-          className="relative mb-16"
-          onWheel={handleWheel}
-        >
-          {/* Left Arrow - Only show if not on first page */}
-          {showLeftArrow && (
-            <button
-              onClick={() => handleArrowClick('prev')}
-              onMouseEnter={() => setIsLeftHovered(true)}
-              onMouseLeave={() => setIsLeftHovered(false)}
-              className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
-                ${isLeftHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
-                ${isClicking ? 'scale-95' : ''}
-                text-blue-400
-                transform hover:scale-110 active:scale-95 focus-futuristic`}
-              aria-label="Anterior"
-            >
-              <ChevronLeft
-                className={`w-6 h-6 transition-transform duration-300 ${isLeftHovered ? 'translate-x-[-2px]' : ''
-                  }`}
-              />
-            </button>
-          )}
-
-          <div
-            ref={containerRef}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 touch-none"
-            style={{
-              // Prevent iOS momentum scrolling
-              WebkitOverflowScrolling: 'touch',
-              // Prevent text selection during drag
-              userSelect: 'none',
-              // Prevent blue highlight on tap (mobile)
-              WebkitTapHighlightColor: 'transparent',
-            }}
-          >
-            {currentItems.map((tech) => (
-              <div
-                key={tech.name}
-                className="relative group"
-                onMouseEnter={() => setHoveredTech(tech.name)}
-                onMouseLeave={() => setHoveredTech(null)}
-              >
-                <div className="h-full glass-card rounded-xl p-6 flex flex-col items-center justify-center hover:animate-glow-pulse transition-all duration-300 transform hover:-translate-y-2">
-                  <div className="text-blue-400 mb-3 transform group-hover:scale-110 transition-transform duration-300">
-                    {tech.icon}
-                  </div>
-                  <h3 className="text-sm font-semibold text-white mb-1 text-center">
-                    {tech.name}
-                  </h3>
-                  <span className="text-xs text-slate-300 text-center">
-                    {tech.category}
-                  </span>
-                </div>
-
-                {/* Tooltip */}
-                {hoveredTech === tech.name && (
-                  <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 glass-card rounded-lg z-10 transition-opacity duration-300">
-                    <p className="text-xs text-slate-300">
-                      {tech.description}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+        <ScrollAnimation animation="fade-in" delay={0.2}>
+          <div className="text-center mb-12">
+            <ScrollAnimation animation="zoom-in" delay={0.4}>
+              <h2 className="text-3xl font-bold mb-4 text-white">
+                Stack Tecnológico <span className="text-gradient">Confiable y Moderno</span>
+              </h2>
+            </ScrollAnimation>
+            <ScrollAnimation animation="fade-in" delay={0.6}>
+              <p className="text-lg max-w-2xl mx-auto text-slate-300">
+                Utilizamos las mejores herramientas y tecnologías para crear soluciones robustas y escalables
+              </p>
+            </ScrollAnimation>
           </div>
+        </ScrollAnimation>
 
-          {/* Right Arrow - Only show if not on last page */}
-          {showRightArrow && (
-            <button
-              onClick={() => handleArrowClick('next')}
-              onMouseEnter={() => setIsRightHovered(true)}
-              onMouseLeave={() => setIsRightHovered(false)}
-              className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
-                ${isRightHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
-                ${isClicking ? 'scale-95' : ''}
-                text-blue-400
-                transform hover:scale-110 active:scale-95 focus-futuristic`}
-              aria-label="Siguiente"
+        <ScrollAnimation animation="fade-in" delay={0.8}>
+          <div
+            className="relative mb-16"
+            onWheel={handleWheel}
+          >
+            {/* Left Arrow - Only show if not on first page */}
+            {showLeftArrow && (
+              <ScrollAnimation animation="slide-left" delay={1.0}>
+                <button
+                  onClick={() => handleArrowClick('prev')}
+                  onMouseEnter={() => setIsLeftHovered(true)}
+                  onMouseLeave={() => setIsLeftHovered(false)}
+                  className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
+                    ${isLeftHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
+                    ${isClicking ? 'scale-95' : ''}
+                    text-blue-400
+                    transform hover:scale-110 active:scale-95 focus-futuristic`}
+                  aria-label="Anterior"
+                >
+                  <ChevronLeft
+                    className={`w-6 h-6 transition-transform duration-300 ${isLeftHovered ? 'translate-x-[-2px]' : ''
+                      }`}
+                  />
+                </button>
+              </ScrollAnimation>
+            )}
+
+            <div
+              ref={containerRef}
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6 touch-none"
+              style={{
+                // Prevent iOS momentum scrolling
+                WebkitOverflowScrolling: 'touch',
+                // Prevent text selection during drag
+                userSelect: 'none',
+                // Prevent blue highlight on tap (mobile)
+                WebkitTapHighlightColor: 'transparent',
+              }}
             >
-              <ChevronRight
-                className={`w-6 h-6 transition-transform duration-300 ${isRightHovered ? 'translate-x-[2px]' : ''
-                  }`}
-              />
-            </button>
-          )}
-        </div>
+              {currentItems.map((tech, index) => (
+                <ScrollAnimation key={tech.name} animation="zoom-in" delay={1.2 + index * 0.05}>
+                  <div
+                    className="relative group"
+                    onMouseEnter={() => setHoveredTech(tech.name)}
+                    onMouseLeave={() => setHoveredTech(null)}
+                  >
+                    <div className="h-full glass-card rounded-xl p-6 flex flex-col items-center justify-center hover:animate-glow-pulse transition-all duration-300 transform hover:-translate-y-2">
+                      <div className="text-blue-400 mb-3 transform group-hover:scale-110 transition-transform duration-300">
+                        {tech.icon}
+                      </div>
+                      <h3 className="text-sm font-semibold text-white mb-1 text-center">
+                        {tech.name}
+                      </h3>
+                      <span className="text-xs text-slate-300 text-center">
+                        {tech.category}
+                      </span>
+                    </div>
+
+                    {/* Tooltip */}
+                    {hoveredTech === tech.name && (
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 w-48 p-3 glass-card rounded-lg z-10 transition-opacity duration-300">
+                        <p className="text-xs text-slate-300">
+                          {tech.description}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </ScrollAnimation>
+              ))}
+            </div>
+
+            {/* Right Arrow - Only show if not on last page */}
+            {showRightArrow && (
+              <ScrollAnimation animation="slide-right" delay={1.0}>
+                <button
+                  onClick={() => handleArrowClick('next')}
+                  onMouseEnter={() => setIsRightHovered(true)}
+                  onMouseLeave={() => setIsRightHovered(false)}
+                  className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
+                    ${isRightHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
+                    ${isClicking ? 'scale-95' : ''}
+                    text-blue-400
+                    transform hover:scale-110 active:scale-95 focus-futuristic`}
+                  aria-label="Siguiente"
+                >
+                  <ChevronRight
+                    className={`w-6 h-6 transition-transform duration-300 ${isRightHovered ? 'translate-x-[2px]' : ''
+                      }`}
+                  />
+                </button>
+              </ScrollAnimation>
+            )}
+          </div>
+        </ScrollAnimation>
 
         {/* Dots indicator with animation */}
-        <div className="flex justify-center mt-8 space-x-2 mb-16">
-          {Array.from({ length: totalPages }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => !isAnimating && setCurrentIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
-                ? 'bg-blue-400 w-8 scale-110 animate-glow-pulse'
-                : 'bg-slate-600 hover:bg-slate-500 scale-90 hover:scale-100'
-                }`}
-              aria-label={`Ir a la página ${index + 1}`}
-            />
-          ))}
-        </div>
+        <ScrollAnimation animation="fade-in" delay={1.4}>
+          <div className="flex justify-center mt-8 space-x-2 mb-16">
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <ScrollAnimation key={index} animation="zoom-in" delay={1.6 + index * 0.1}>
+                <button
+                  onClick={() => !isAnimating && setCurrentIndex(index)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${index === currentIndex
+                    ? 'bg-blue-400 w-8 scale-110 animate-glow-pulse'
+                    : 'bg-slate-600 hover:bg-slate-500 scale-90 hover:scale-100'
+                    }`}
+                  aria-label={`Ir a la página ${index + 1}`}
+                />
+              </ScrollAnimation>
+            ))}
+          </div>
+        </ScrollAnimation>
 
         {/* Lead Generation Offer */}
-        <div className="max-w-4xl mx-auto">
-          <div className="glass-card rounded-2xl p-8 transform transition-all duration-300 hover:scale-[1.01] hover:animate-glow-pulse">
-            <div className="flex flex-col md:flex-row items-center gap-8">
-              <div className="md:w-2/3">
-                <h3 className="text-2xl font-bold mb-4 text-white">
-                  ¿Necesitas una auditoría técnica?
-                </h3>
-                <p className="text-slate-300 mb-6">
-                  Obtén un diagnóstico gratuito de tu arquitectura actual y descubre oportunidades de mejora para tu proyecto.
-                </p>
-                <ul className="space-y-3">
-                  <li className="flex items-center text-slate-300">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
-                    Análisis de arquitectura y patrones de diseño
-                  </li>
-                  <li className="flex items-center text-slate-300">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-100"></div>
-                    Revisión de seguridad y rendimiento
-                  </li>
-                  <li className="flex items-center text-slate-300">
-                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-200"></div>
-                    Recomendaciones de mejores prácticas
-                  </li>
-                </ul>
-              </div>
+        <ScrollAnimation animation="zoom-in" delay={1.8}>
+          <div className="max-w-4xl mx-auto">
+            <div className="glass-card rounded-2xl p-8 transform transition-all duration-300 hover:scale-[1.01] hover:animate-glow-pulse">
+              <div className="flex flex-col md:flex-row items-center gap-8">
+                <ScrollAnimation animation="slide-left" delay={2.0}>
+                  <div className="md:w-2/3">
+                    <ScrollAnimation animation="fade-in" delay={2.2}>
+                      <h3 className="text-2xl font-bold mb-4 text-white">
+                        ¿Necesitas una auditoría técnica?
+                      </h3>
+                    </ScrollAnimation>
+                    <ScrollAnimation animation="fade-in" delay={2.4}>
+                      <p className="text-slate-300 mb-6">
+                        Obtén un diagnóstico gratuito de tu arquitectura actual y descubre oportunidades de mejora para tu proyecto.
+                      </p>
+                    </ScrollAnimation>
+                    <ScrollAnimation animation="fade-in" delay={2.6}>
+                      <ul className="space-y-3">
+                        <li className="flex items-center text-slate-300">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse"></div>
+                          Análisis de arquitectura y patrones de diseño
+                        </li>
+                        <li className="flex items-center text-slate-300">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-100"></div>
+                          Revisión de seguridad y rendimiento
+                        </li>
+                        <li className="flex items-center text-slate-300">
+                          <div className="w-2 h-2 bg-blue-400 rounded-full mr-2 animate-pulse delay-200"></div>
+                          Recomendaciones de mejores prácticas
+                        </li>
+                      </ul>
+                    </ScrollAnimation>
+                  </div>
+                </ScrollAnimation>
 
-              <div className="md:w-1/3 w-full">
-                <a
-                  href="#contact"
-                  className="btn-futuristic text-white text-center block w-full"
-                >
-                  Solicitar Diagnóstico Gratuito
-                </a>
+                <ScrollAnimation animation="slide-right" delay={2.2}>
+                  <div className="md:w-1/3 w-full">
+                    <a
+                      href="#contact"
+                      className="btn-futuristic text-white text-center block w-full"
+                    >
+                      Solicitar Diagnóstico Gratuito
+                    </a>
+                  </div>
+                </ScrollAnimation>
               </div>
             </div>
           </div>
-        </div>
+        </ScrollAnimation>
       </div>
 
       {/* Animation keyframes */}
