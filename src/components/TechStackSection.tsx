@@ -298,24 +298,22 @@ const TechStackSection: React.FC = () => {
           >
             {/* Left Arrow - Only show if not on first page */}
             {showLeftArrow && (
-              <ScrollAnimation animation="slide-left" delay={1.0}>
-                <button
-                  onClick={() => handleArrowClick('prev')}
-                  onMouseEnter={() => setIsLeftHovered(true)}
-                  onMouseLeave={() => setIsLeftHovered(false)}
-                  className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
+              <button
+                onClick={() => handleArrowClick('prev')}
+                onMouseEnter={() => setIsLeftHovered(true)}
+                onMouseLeave={() => setIsLeftHovered(false)}
+                className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 glass-card p-3 rounded-full transition-all duration-300 
                     ${isLeftHovered ? 'scale-110 animate-glow-pulse' : 'scale-100'}
                     ${isClicking ? 'scale-95' : ''}
                     text-blue-400
                     transform hover:scale-110 active:scale-95 focus-futuristic`}
-                  aria-label="Anterior"
-                >
-                  <ChevronLeft
-                    className={`w-6 h-6 transition-transform duration-300 ${isLeftHovered ? 'translate-x-[-2px]' : ''
-                      }`}
-                  />
-                </button>
-              </ScrollAnimation>
+                aria-label="Anterior"
+              >
+                <ChevronLeft
+                  className={`w-6 h-6 transition-transform duration-300 ${isLeftHovered ? 'translate-x-[-2px]' : ''
+                    }`}
+                />
+              </button>
             )}
 
             <div
