@@ -40,8 +40,8 @@ const Header: React.FC = () => {
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-500 ${isScrolled
-          ? 'glass-dark py-3'
-          : 'bg-transparent py-5'
+        ? 'glass-dark py-3'
+        : 'bg-transparent py-5'
         }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -58,39 +58,41 @@ const Header: React.FC = () => {
         <nav className="hidden md:flex space-x-6 items-center">
           <Link
             to="/#about"
-            className="hover:text-gradient transition-all duration-300 focus-futuristic"
+            className="hover:text-gradient transition-all duration-300"
             onClick={() => window.scrollTo(0, 0)}
           >
             Acerca de
           </Link>
           <Link
             to="/#blog"
-            className="hover:text-gradient transition-all duration-300 focus-futuristic"
+            className="hover:text-gradient transition-all duration-300"
             onClick={() => window.scrollTo(0, 0)}
           >
             Blog
           </Link>
           <Link
             to="/#services"
-            className="hover:text-gradient transition-all duration-300 focus-futuristic"
+            className="hover:text-gradient transition-all duration-300"
             onClick={() => window.scrollTo(0, 0)}
           >
             Servicios
           </Link>
           <Link
             to="/#contact"
-            className="hover:text-gradient transition-all duration-300 focus-futuristic"
+            className="hover:text-gradient transition-all duration-300"
             onClick={() => window.scrollTo(0, 0)}
           >
             Contacto
           </Link>
-          <button
+          {/*
+           <button
             onClick={toggleDarkMode}
             className="p-2 rounded-full glass-card hover:animate-glow-pulse transition-all duration-300 focus-futuristic"
             aria-label="Toggle dark mode"
           >
             {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-blue-400" />}
           </button>
+         */}
         </nav>
 
         {/* Mobile Navigation Toggle */}
