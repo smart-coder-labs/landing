@@ -40,7 +40,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-500 ${isScrolled
-        ? 'glass-dark py-3'
+        ? ''
         : 'bg-transparent py-5'
         }`}
     >
@@ -49,7 +49,7 @@ const Header: React.FC = () => {
           <Link to="/" className="text-2xl font-bold text-gradient hover:text-glow transition-all duration-300">
             SmartCoderLabs
           </Link>
-          <p className="hidden md:block ml-4 text-sm text-slate-300 italic animate-float-slow">
+          <p className="hidden md:block ml-4 text-sm text-slate-300 italic">
             "Codificando el futuro con inteligencia"
           </p>
         </div>
@@ -84,15 +84,6 @@ const Header: React.FC = () => {
           >
             Contacto
           </Link>
-          {/*
-           <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full glass-card hover:animate-glow-pulse transition-all duration-300 focus-futuristic"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-blue-400" />}
-          </button>
-         */}
         </nav>
 
         {/* Mobile Navigation Toggle */}
@@ -164,9 +155,6 @@ const Header: React.FC = () => {
             >
               Contacto
             </Link>
-            <p className="text-sm text-slate-300 italic pt-2 border-t border-slate-700 animate-float-slow">
-              "Codificando el futuro con inteligencia"
-            </p>
           </div>
         </motion.div>
       )}

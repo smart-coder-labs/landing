@@ -11,39 +11,18 @@ const Hero: React.FC = () => {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center bg-futuristic-dark overflow-hidden">
-      {/* Animated Background */}
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Hero Background Video */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-grid-pattern opacity-30"></div>
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-[1000px] h-[1000px] gradient-primary rounded-full animate-spin-slow opacity-20"></div>
-          <div className="absolute w-[800px] h-[800px] gradient-secondary rounded-full animate-pulse-slow opacity-15"></div>
-          <div className="absolute w-[600px] h-[600px] gradient-accent rounded-full animate-float-slow opacity-10"></div>
-        </div>
-      </div>
-
-      {/* Floating Tech Icons */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-[10%] animate-float-slow">
-          <div className="glass-card p-3 rounded-full">
-            <Code size={40} className="text-blue-400" />
-          </div>
-        </div>
-        <div className="absolute top-40 right-[15%] animate-float-slow" style={{ animationDelay: '1s' }}>
-          <div className="glass-card p-3 rounded-full">
-            <Brain size={48} className="text-purple-400" />
-          </div>
-        </div>
-        <div className="absolute bottom-32 left-[20%] animate-float-slow" style={{ animationDelay: '2s' }}>
-          <div className="glass-card p-3 rounded-full">
-            <Blocks size={36} className="text-cyan-400" />
-          </div>
-        </div>
-        <div className="absolute bottom-48 right-[25%] animate-float-slow" style={{ animationDelay: '3s' }}>
-          <div className="glass-card p-3 rounded-full">
-            <Sparkles size={32} className="text-pink-400" />
-          </div>
-        </div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+        >
+          <source src="/background.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Main Content mock comment */}
@@ -51,7 +30,7 @@ const Hero: React.FC = () => {
         <div className="max-w-4xl mx-auto">
           <ScrollAnimation animation="zoom-in" delay={0.2}>
             <div className="mb-6 relative">
-              <h1 className="text-6xl md:text-8xl font-bold tracking-tight text-gradient-no-shadow animate-glow-pulse">
+              <h1 className="text-6xl md:text-8xl font-bold text-white">
                 SmartCoderLabs
               </h1>
               <div className="absolute -top-8 -right-8 w-16 h-16 gradient-primary rounded-full blur-xl animate-pulse"></div>
