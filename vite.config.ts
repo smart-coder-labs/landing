@@ -1,16 +1,18 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { createReactConfig } from '@smart-coder-labs/vite-config/react';
+import tailwindcss from '@tailwindcss/vite';
+import { defineConfig, mergeConfig } from 'vite';
 
-// https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [react()],
-  optimizeDeps: {
-    exclude: ['lucide-react'],
-  },
+const baseConfig = createReactConfig({
+  port: 5173,
+  excludeDeps: ['lucide-react'],
+  plugins: [tailwindcss()]
+});
+
+export default mergeConfig(baseConfig, defineConfig({
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './setupTests.ts',
   },
-});
+}));
