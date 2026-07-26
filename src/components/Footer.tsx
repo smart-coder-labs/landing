@@ -1,50 +1,30 @@
-import React from 'react';
-import { Code, Heart } from 'lucide-react';
+import { Network } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { useLanguage } from '../i18n';
 
-const Footer: React.FC = () => {
+function Footer() {
+  const { t } = useLanguage();
   const year = new Date().getFullYear();
-
   return (
-    <footer className="bg-futuristic-dark text-white py-12">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center border-b border-slate-700 pb-8 mb-8">
-          <div className="flex items-center mb-6 md:mb-0">
-            <div className="glass-card p-2 rounded-lg mr-3">
-              <Code className="text-blue-400" />
-            </div>
-            <span className="text-xl font-bold text-gradient">SmartCoderLabs</span>
+    <footer className="site-footer">
+      <div className="container footer-inner">
+        <div className="footer-primary">
+          <div className="footer-brand">
+            <div className="brand"><span className="brand-mark" aria-hidden="true"><Network size={17} /></span>SmartCoderLabs</div>
+            <p>{t.footer.built}</p>
           </div>
-
-          <nav className="flex flex-wrap justify-center gap-x-8 gap-y-4">
-            <a href="#about" className="text-slate-300 hover:text-gradient transition-all duration-300">
-              Acerca de
-            </a>
-            <a href="#blog" className="text-slate-300 hover:text-gradient transition-all duration-300">
-              Blog
-            </a>
-            <a href="#services" className="text-slate-300 hover:text-gradient transition-all duration-300">
-              Servicios
-            </a>
-            <a href="#contact" className="text-slate-300 hover:text-gradient transition-all duration-300">
-              Contacto
-            </a>
+          <nav className="footer-navigation" aria-label={t.nav.footer}>
+            <p className="footer-label">{t.footer.navigation}</p>
+            <div className="footer-nav"><Link to="/#about">{t.nav.about}</Link><Link to="/#services">{t.nav.services}</Link><Link to="/#blog">{t.nav.insights}</Link><Link to="/#contact">{t.nav.contact}</Link></div>
           </nav>
         </div>
-
-        <div className="flex flex-col md:flex-row justify-between items-center text-slate-400 text-sm">
-          <div className="mb-4 md:mb-0">
-            &copy; {year} SmartCoderLabs. Todos los derechos reservados.
-          </div>
-
-          <div className="flex items-center">
-            <span className="flex items-center">
-              Hecho con <Heart size={14} className="text-red-400 mx-1 animate-pulse" /> en Colombia
-            </span>
-          </div>
+        <div className="footer-meta">
+          <span>© {year} SmartCoderLabs</span>
+          <span>{t.footer.rights}</span>
         </div>
       </div>
     </footer>
   );
-};
+}
 
 export default Footer;

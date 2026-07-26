@@ -1,177 +1,37 @@
-import React, { useState, useEffect } from 'react';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { useState } from 'react';
+import { Menu, Moon, Network, Sun, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { useLanguage, useTheme } from '../i18n';
 
-const Header: React.FC = () => {
+function Header() {
+  const { locale, setLocale, t } = useLanguage();
+  const { theme, toggleTheme } = useTheme();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true); // Modo oscuro por defecto
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    // Aplicar modo oscuro por defecto
-    document.documentElement.classList.add('dark');
-    setIsDarkMode(true);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
-  const toggleDarkMode = () => {
-    setIsDarkMode(!isDarkMode);
-    document.documentElement.classList.toggle('dark');
-  };
+  const closeMenu = () => setIsMenuOpen(false);
 
   return (
-    <header
-      className={`fixed w-full z-50 transition-all duration-500 ${isScrolled
-        ? 'glass-dark py-3'
-        : 'bg-transparent py-5'
-        }`}
-    >
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <div className="flex items-center">
-          <Link to="/" className="text-2xl font-bold text-gradient hover:text-glow transition-all duration-300">
-            SmartCoderLabs
-          </Link>
-          <p className="hidden md:block ml-4 text-sm text-slate-300 italic animate-float-slow">
-            "Codificando el futuro con inteligencia"
-          </p>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-6 items-center">
-          <Link
-            to="/#about"
-            className="hover:text-gradient transition-all duration-300"
-            onClick={() => window.scrollTo(0, 0)}
-          >
-            Acerca de
-          </Link>
-          <Link
-            to="/#blog"
-            className="hover:text-gradient transition-all duration-300"
-            onClick={() => window.scrollTo(0, 0)}
-          >
-            Blog
-          </Link>
-          <Link
-            to="/#services"
-            className="hover:text-gradient transition-all duration-300"
-            onClick={() => window.scrollTo(0, 0)}
-          >
-            Servicios
-          </Link>
-          <Link
-            to="/#contact"
-            className="hover:text-gradient transition-all duration-300"
-            onClick={() => window.scrollTo(0, 0)}
-          >
-            Contacto
-          </Link>
-          {/*
-           <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full glass-card hover:animate-glow-pulse transition-all duration-300 focus-futuristic"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-blue-400" />}
-          </button>
-         */}
+    <header className="site-header">
+      <div className="container header-inner">
+        <Link className="brand" to="/" onClick={closeMenu} aria-label={t.nav.home}>
+          <span className="brand-mark" aria-hidden="true"><Network size={17} /></span>
+          SmartCoderLabs
+        </Link>
+        <nav className="desktop-nav" aria-label={t.nav.primary}>
+          {([['about', '/#about'], ['services', '/#services'], ['insights', '/#blog'], ['contact', '/#contact']] as const).map(([key, to]) => <Link key={to} to={to}>{t.nav[key]}</Link>)}
         </nav>
-
-        {/* Mobile Navigation Toggle */}
-        <div className="md:hidden flex items-center">
-          <button
-            onClick={toggleDarkMode}
-            className="p-2 rounded-full glass-card hover:animate-glow-pulse transition-all duration-300 mr-2 focus-futuristic"
-            aria-label="Toggle dark mode"
-          >
-            {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-blue-400" />}
-          </button>
-          <button
-            onClick={toggleMenu}
-            className="p-2 rounded-full glass-card hover:animate-glow-pulse transition-all duration-300 focus-futuristic"
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? <X size={24} className="text-red-400" /> : <Menu size={24} className="text-blue-400" />}
-          </button>
-        </div>
+        <div className="language-switcher" aria-label={t.language}><button type="button" className={locale === 'en' ? 'is-active' : ''} onClick={() => setLocale('en')} aria-pressed={locale === 'en'}>EN</button><span aria-hidden="true">/</span><button type="button" className={locale === 'es' ? 'is-active' : ''} onClick={() => setLocale('es')} aria-pressed={locale === 'es'}>ES</button></div>
+        <button className="theme-button" type="button" onClick={toggleTheme} aria-label={theme === 'dark' ? t.lightTheme : t.darkTheme} aria-pressed={theme === 'light'}>{theme === 'dark' ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}</button>
+        <button className="menu-button" type="button" onClick={() => setIsMenuOpen((open) => !open)} aria-expanded={isMenuOpen} aria-controls="mobile-navigation" aria-label={isMenuOpen ? t.nav.close : t.nav.open}>
+          {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
       </div>
-
-      {/* Mobile Menu */}
-      {isMenuOpen && (
-        <motion.div
-          className="md:hidden glass-dark"
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
-            <Link
-              to="/#about"
-              className="py-2 hover:text-gradient transition-all duration-300 block focus-futuristic"
-              onClick={() => {
-                toggleMenu();
-                window.scrollTo(0, 0);
-              }}
-            >
-              Acerca de
-            </Link>
-            <Link
-              to="/#blog"
-              className="py-2 hover:text-gradient transition-all duration-300 block focus-futuristic"
-              onClick={() => {
-                toggleMenu();
-                window.scrollTo(0, 0);
-              }}
-            >
-              Blog
-            </Link>
-            <Link
-              to="/#services"
-              className="py-2 hover:text-gradient transition-all duration-300 block focus-futuristic"
-              onClick={() => {
-                toggleMenu();
-                window.scrollTo(0, 0);
-              }}
-            >
-              Servicios
-            </Link>
-            <Link
-              to="/#contact"
-              className="py-2 hover:text-gradient transition-all duration-300 block focus-futuristic"
-              onClick={() => {
-                toggleMenu();
-                window.scrollTo(0, 0);
-              }}
-            >
-              Contacto
-            </Link>
-            <p className="text-sm text-slate-300 italic pt-2 border-t border-slate-700 animate-float-slow">
-              "Codificando el futuro con inteligencia"
-            </p>
-          </div>
-        </motion.div>
-      )}
+      <nav id="mobile-navigation" className={`mobile-nav ${isMenuOpen ? 'is-open' : ''}`} aria-label={t.nav.mobile}>
+        <div className="container">
+          {([['about', '/#about'], ['services', '/#services'], ['insights', '/#blog'], ['contact', '/#contact']] as const).map(([key, to]) => <Link key={to} to={to} onClick={closeMenu}>{t.nav[key]}</Link>)}
+        </div>
+      </nav>
     </header>
   );
-};
+}
 
 export default Header;
