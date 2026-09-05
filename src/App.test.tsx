@@ -34,6 +34,26 @@ describe('App', () => {
     vi.useRealTimers();
   });
 
+  it('resets the inner scroll container, which is what actually scrolls', () => {
+    // The shell scrolls .site-content, not the document, so resetting only the
+    // window left the previous page's position and dropped readers near the end
+    // of the article they had just opened.
+    window.history.pushState({}, '', '/blog/some-article');
+    const originalScrollTo = window.scrollTo;
+    Object.defineProperty(window, 'scrollTo', { configurable: true, value: vi.fn() });
+
+    const { container } = render(<App />);
+    const scrollContainer = container.querySelector('.site-content') as HTMLElement;
+    scrollContainer.scrollTop = 2400;
+
+    window.history.pushState({}, '', '/blog/another-article');
+    render(<App />);
+
+    expect((document.querySelector('.site-content') as HTMLElement).scrollTop).toBe(0);
+
+    Object.defineProperty(window, 'scrollTo', { configurable: true, value: originalScrollTo });
+  });
+
   it('renders HomePage without showing the application loading screen', () => {
     window.history.pushState({}, '', '/');
     const originalScrollTo = window.scrollTo;

@@ -2,12 +2,27 @@ import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { LanguageProvider, ThemeProvider, localeFromPath, useLanguage } from './i18n';
+import { LanguageProvider, ThemeProvider, localeFromPath, localePrefix, useLanguage } from './i18n';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './components/NotFoundPage';
 import BlogIndexPage from './pages/BlogIndexPage';
 
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
+
+const homePaths = new Set(Object.values(localePrefix).map((prefix) => prefix || '/'));
+const isHomePath = (pathname: string) => homePaths.has(pathname.replace(/\/$/, '') || '/');
+
+/**
+ * The page scrolls an inner container, not the document, so resetting the
+ * window leaves the previous page's scroll position in place. Navigating from
+ * far down the article archive used to land the reader near the end of the
+ * article they opened.
+ */
+function resetScroll() {
+  const container = document.querySelector('.site-content');
+  if (container) container.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
 
 function ScrollToRoute() {
   const { pathname, hash } = useLocation();
@@ -23,8 +38,10 @@ function ScrollToRoute() {
     };
 
     if (scrollToHash()) return;
-    if (pathname !== '/' || !hash) {
-      window.scrollTo(0, 0);
+    // Only a homepage renders the anchored sections, so only there is it worth
+    // waiting for the target to mount. Every other route goes to the top.
+    if (!hash || !isHomePath(pathname)) {
+      resetScroll();
       return;
     }
 
