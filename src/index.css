@@ -109,9 +109,9 @@ button, a, input, textarea { -webkit-tap-highlight-color: var(--clear); }
 .text-link { display: inline-flex; align-items: center; gap: 0.35rem; color: var(--accent-bright); font-weight: 740; }
 .text-link:hover { color: var(--text); }
 
-.reveal { opacity: 0; translate: 0 18px; transition: opacity 550ms cubic-bezier(0.16, 1, 0.3, 1), translate 550ms cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--reveal-delay, 0ms); }
-.reveal.is-in { opacity: 1; translate: none; }
-@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; translate: none; transition: none; } }
+.has-js .reveal { opacity: 0; translate: 0 18px; transition: opacity 550ms cubic-bezier(0.16, 1, 0.3, 1), translate 550ms cubic-bezier(0.16, 1, 0.3, 1); transition-delay: var(--reveal-delay, 0ms); }
+.has-js .reveal.is-in { opacity: 1; translate: none; }
+@media (prefers-reduced-motion: reduce) { .has-js .reveal { opacity: 1; translate: none; transition: none; } }
 
 .skip-link { position: fixed; z-index: 100; top: 1rem; left: 1rem; padding: 0.7rem 0.9rem; border-radius: var(--radius-sm); background: var(--text); color: var(--canvas-deep); transform: translateY(-180%); transition: transform 180ms ease; }
 .skip-link:focus { transform: translateY(0); }

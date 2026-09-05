@@ -1,10 +1,3 @@
----
-title: "Arquitectura Hexagonal: Diseñando sistemas mantenibles"
-image: "/articles/hexagonal-architecture/images/portada.jpg"
-readTime: "10 min"
-publicationDate: "2024-07-26"
----
-
 ## Introducción
 
 La arquitectura hexagonal, también conocida como arquitectura de puertos y adaptadores, es un patrón de diseño de software que tiene como objetivo crear sistemas de software débilmente acoplados, fácilmente comprobables y mantenibles. Propuesta por Alistair Cockburn, esta arquitectura enfatiza la separación de intereses aislando la lógica de negocio central de las preocupaciones de infraestructura.

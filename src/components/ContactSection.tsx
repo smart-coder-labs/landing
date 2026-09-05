@@ -1,6 +1,6 @@
 import { ArrowUpRight, Github, Linkedin, Loader2, Mail, MapPin, Send, Twitter, Youtube } from 'lucide-react';
 import { FormEvent, useState } from 'react';
-import { supabaseClient } from '../lib';
+import { getSupabaseClient } from '../lib';
 import { useLanguage } from '../i18n';
 import Reveal from './Reveal';
 
@@ -16,7 +16,7 @@ function ContactSection() {
     event.preventDefault();
     setStatus('loading');
     try {
-      const { error } = await supabaseClient.from('contact_messages').insert({ full_name: values.name, email: values.email, subject: values.subject, message: values.message });
+      const { error } = await getSupabaseClient().from('contact_messages').insert({ full_name: values.name, email: values.email, subject: values.subject, message: values.message });
       setStatus(error ? 'error' : 'success');
     } catch {
       setStatus('error');

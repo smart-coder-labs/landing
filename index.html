@@ -54,6 +54,9 @@
             : matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
           document.documentElement.dataset.theme = theme;
           document.documentElement.style.colorScheme = theme;
+          // Entry animations start hidden, so only opt in once we know scripts run.
+          // Without this a prerendered page would ship its content at opacity 0.
+          document.documentElement.classList.add('has-js');
         } catch {
           // Keep the CSS default when storage or media queries are unavailable.
         }

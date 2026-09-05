@@ -1,57 +1,48 @@
 /* global console, process */
 /*
- * Write public/sitemap.xml from the published articles in Supabase.
- * Run from landing, after the articles are seeded:
- *   node --env-file=.env scripts/generate-sitemap.mjs
+ * Write public/sitemap.xml from the articles in the repository.
+ * Run from landing:  npm run sitemap
  *
- * A hand-maintained sitemap goes stale the moment an article is published, so
- * this reads the same source of truth the site renders from. The anon key is
- * enough: published articles are readable under the existing RLS policy.
+ * Reads the same files the site renders, so it cannot drift from what is
+ * actually published, and it needs no network access or credentials.
  */
-import { writeFile } from 'node:fs/promises';
+import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { createClient } from '@supabase/supabase-js';
 
 const siteUrl = process.env.SITE_URL || 'https://www.smartcoderlabs.com';
-const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
-const key = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY;
+const projectRoot = resolve(import.meta.dirname, '..');
+const contentDir = resolve(projectRoot, 'src/content/articles');
 
-if (!url || !key) throw new Error('VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are required.');
+const entries = await readdir(contentDir, { withFileTypes: true });
+const articles = [];
+for (const entry of entries.filter((item) => item.isDirectory())) {
+  const metadata = JSON.parse(await readFile(resolve(contentDir, entry.name, 'metadata.json'), 'utf8'));
+  if (metadata.isPublished === false) continue;
+  articles.push({ slug: metadata.slug, publishedAt: metadata.publicationDate });
+}
+articles.sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
+if (!articles.length) throw new Error('No published articles found; refusing to write an article-less sitemap.');
 
-const supabase = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
-const { data, error } = await supabase
-  .from('articles')
-  .select('slug,published_at')
-  .eq('is_published', true)
-  .order('published_at', { ascending: false });
-if (error) throw new Error(`Unable to read articles: ${error.message}`);
-
-const today = new Date().toISOString().slice(0, 10);
-const homeLastmod = data[0]?.published_at?.slice(0, 10) || today;
-const entries = [
+const homeLastmod = articles[0].publishedAt;
+const urls = [
   // Both language homepages are distinct pages and both get indexed.
   { loc: `${siteUrl}/`, lastmod: homeLastmod, changefreq: 'weekly', priority: '1.0' },
   { loc: `${siteUrl}/es`, lastmod: homeLastmod, changefreq: 'weekly', priority: '1.0' },
   // Articles have a single language version; /es/blog/* is a locale shell whose
   // canonical points here, so only the canonical URL is listed.
-  ...data.map((article) => ({
-    loc: `${siteUrl}/blog/${article.slug}`,
-    lastmod: article.published_at.slice(0, 10),
-    changefreq: 'monthly',
-    priority: '0.8',
-  })),
+  ...articles.map((article) => ({ loc: `${siteUrl}/blog/${article.slug}`, lastmod: article.publishedAt, changefreq: 'monthly', priority: '0.8' })),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${entries.map((e) => `  <url>
-    <loc>${e.loc}</loc>
-    <lastmod>${e.lastmod}</lastmod>
-    <changefreq>${e.changefreq}</changefreq>
-    <priority>${e.priority}</priority>
+${urls.map((url) => `  <url>
+    <loc>${url.loc}</loc>
+    <lastmod>${url.lastmod}</lastmod>
+    <changefreq>${url.changefreq}</changefreq>
+    <priority>${url.priority}</priority>
   </url>`).join('\n')}
 </urlset>
 `;
 
-await writeFile(resolve(import.meta.dirname, '../public/sitemap.xml'), xml, 'utf8');
-console.log(`Wrote sitemap.xml with ${entries.length} URLs (1 homepage + ${data.length} articles).`);
+await writeFile(resolve(projectRoot, 'public/sitemap.xml'), xml, 'utf8');
+console.log(`Wrote sitemap.xml with ${urls.length} URLs (2 homepages + ${articles.length} articles).`);

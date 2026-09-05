@@ -1,10 +1,3 @@
----
-title: "Clean Code: Principios Fundamentales para un Desarrollo Sostenible"
-image: "/articles/clean-code/images/portada.jpg"
-readTime: "12 min"
-publicationDate: "2024-06-22"
----
-
 ## Introducción
 
 Escribir código que funcione es solo el primer paso. Escribir "Clean Code" (Código Limpio) es el arte de crear software que no solo sea funcional, sino también legible, mantenible y comprensible por otros desarrolladores (¡incluido tu yo futuro!). Como dijo Robert C. Martin (Uncle Bob) en su influyente libro "Clean Code: A Handbook of Agile Software Craftsmanship", el código limpio es elegante y eficiente.

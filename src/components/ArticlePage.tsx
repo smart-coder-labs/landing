@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import ReactMarkdown, { defaultUrlTransform } from 'react-markdown';
+import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import remarkGfm from 'remark-gfm';
 import { localeHref, useLanguage } from '../i18n';
-import { getPublishedArticle, siteUrl, useSeo, type Article } from '../lib';
+import { getPublishedArticle, siteUrl, useSeo } from '../lib';
 
 
 const prismTheme = {
@@ -61,49 +61,22 @@ function Code({ className, children, ...props }: React.ComponentPropsWithoutRef<
       PreTag="div"
       wrapLongLines
       customStyle={{ margin: 0, padding: 0, background: 'transparent', overflow: 'visible', whiteSpace: 'pre-wrap', overflowWrap: 'anywhere', wordBreak: 'break-word' }}
-      codeTagProps={{ className, 'data-language': language }}
+      codeTagProps={{ className, 'data-language': language } as React.HTMLProps<HTMLElement>}
     >
       {String(children).replace(/\n$/, '')}
     </SyntaxHighlighter>
   );
 }
 
-function StorageImage({ src, alt, assetUrls, ...props }: React.ComponentPropsWithoutRef<'img'> & { assetUrls: Record<string, string> }) {
-  const objectPath = src?.startsWith('storage://blog-assets/') ? src.slice('storage://blog-assets/'.length) : null;
-  const resolvedSrc = objectPath ? assetUrls[objectPath] : src;
-  if (!resolvedSrc) return null;
-  return <img alt={alt || ''} loading="lazy" src={resolvedSrc} {...props} />;
+function ArticleImage({ src, alt, ...props }: React.ComponentPropsWithoutRef<'img'>) {
+  if (!src) return null;
+  return <img alt={alt || ''} loading="lazy" decoding="async" src={src} {...props} />;
 }
 
 function ArticlePage() {
   const { locale, t } = useLanguage();
   const { articleSlug } = useParams<{ articleSlug: string }>();
-  const [article, setArticle] = useState<Article | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!articleSlug) return;
-    let isCurrent = true;
-
-    async function loadArticle() {
-      try {
-        const nextArticle = await getPublishedArticle(articleSlug);
-        if (!isCurrent) return;
-        if (!nextArticle) throw new Error(t.article.notFound);
-        setArticle(nextArticle);
-      } catch (reason: unknown) {
-        if (isCurrent) setError(reason instanceof Error ? reason.message : t.article.unavailable);
-      }
-    }
-
-    setArticle(null);
-    setError(null);
-    void loadArticle();
-
-    return () => {
-      isCurrent = false;
-    };
-  }, [articleSlug, t.article.notFound, t.article.unavailable]);
+  const article = articleSlug ? getPublishedArticle(articleSlug) : null;
 
   const articlePath = `/blog/${articleSlug ?? ''}`;
   const structuredData = useMemo(() => article ? {
@@ -111,11 +84,12 @@ function ArticlePage() {
     '@type': 'BlogPosting',
     headline: article.title,
     description: article.description,
-    datePublished: article.published_at,
-    dateModified: article.published_at,
+    datePublished: article.publishedAt,
+    dateModified: article.publishedAt,
     inLanguage: 'es',
-    wordCount: article.content_markdown.trim().split(/\s+/).length,
-    keywords: article.tags.map((tag) => tag.name).join(', '),
+    wordCount: article.contentMarkdown.trim().split(/\s+/).length,
+    keywords: article.tags.join(', '),
+    image: [`${siteUrl}${article.coverImage}`],
     mainEntityOfPage: { '@type': 'WebPage', '@id': `${siteUrl}${articlePath}` },
     author: { '@type': 'Organization', name: 'SmartCoderLabs', url: `${siteUrl}/` },
     publisher: { '@type': 'Organization', name: 'SmartCoderLabs', url: `${siteUrl}/`, logo: { '@type': 'ImageObject', url: `${siteUrl}/favicon.png` } },
@@ -125,24 +99,24 @@ function ArticlePage() {
     title: article?.title,
     description: article?.description,
     path: articlePath,
+    image: article ? `${siteUrl}${article.coverImage}` : undefined,
     type: 'article',
     // These posts are written in Spanish regardless of the interface language.
     lang: article ? 'es' : undefined,
     structuredData,
   });
 
-  if (!articleSlug || error) return <div className="article-page"><div className="glass-panel status-card" role="alert">{error || t.article.missing}</div></div>;
-  if (!article) return <div className="article-page"><div className="glass-panel status-card" role="status">{t.article.loading}</div></div>;
+  if (!article) return <div className="article-page"><div className="glass-panel status-card" role="alert">{articleSlug ? t.article.notFound : t.article.missing}</div></div>;
 
   return (
     <article className="article-page">
       <header>
         <h1>{article.title}</h1>
-        <p className="article-meta">{new Date(article.published_at).toLocaleDateString(locale === 'es' ? 'es-CO' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })} · {article.read_time_minutes} min {t.article.read}</p>
-        {article.tags.map((tag) => <span className="tag" key={tag.slug}>{tag.name}</span>)}
-        {article.cover_asset && <StorageImage src={`storage://blog-assets/${article.cover_asset.object_path}`} alt={article.cover_asset.alt_text || article.title} assetUrls={Object.fromEntries(article.assets.map((asset) => [asset.object_path, asset.signed_url]))} />}
+        <p className="article-meta">{new Date(article.publishedAt).toLocaleDateString(locale === 'es' ? 'es-CO' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' })} · {article.readTimeMinutes} min {t.article.read}</p>
+        {article.tags.map((tag) => <span className="tag" key={tag}>{tag}</span>)}
+        {article.coverImage && <ArticleImage src={article.coverImage} alt={article.coverAlt} width={1200} height={800} />}
       </header>
-      <div className="prose"><ReactMarkdown remarkPlugins={[remarkGfm]} urlTransform={(url) => url.startsWith('storage://blog-assets/') ? url : defaultUrlTransform(url)} components={{ img: (props) => <StorageImage {...props} assetUrls={Object.fromEntries(article.assets.map((asset) => [asset.object_path, asset.signed_url]))} />, a: ({ href, ...props }) => <a href={href} target="_blank" rel="noopener noreferrer" {...props} />, code: Code }}>{article.content_markdown}</ReactMarkdown></div>
+      <div className="prose"><ReactMarkdown remarkPlugins={[remarkGfm]} components={{ img: ArticleImage, a: ({ href, ...props }) => <a href={href} target="_blank" rel="noopener noreferrer" {...props} />, code: Code }}>{article.contentMarkdown}</ReactMarkdown></div>
       <p className="article-back"><Link className="text-link" to={localeHref(locale, '/#blog')}>{t.article.back}</Link></p>
     </article>
   );

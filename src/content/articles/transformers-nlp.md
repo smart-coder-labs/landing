@@ -1,10 +1,3 @@
----
-title: "Introducción práctica a los Transformers en NLP"
-image: "/articles/transformers-nlp/images/portada.jpg"
-readTime: "15 min"
-publicationDate: "2024-07-28"
----
-
 ## Introducción
 
 Los modelos Transformer han revolucionado el campo del Procesamiento de Lenguaje Natural (NLP) desde su introducción en el paper "Attention Is All You Need" por Vaswani et al. en 2017. Su capacidad para manejar dependencias de largo alcance en el texto y su eficiencia en la paralelización los han convertido en la base de los modelos de lenguaje más avanzados hasta la fecha, como BERT, GPT y T5.

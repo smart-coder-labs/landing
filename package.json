@@ -5,11 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run prerender",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "build:ssg": "vite build --config vite.ssg.config.ts",
+    "prerender": "npm run build:ssg && node scripts/prerender.mjs",
+    "build:client": "vite build",
+    "sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@smart-coder-labs/eslint-config": "^1.0.2",

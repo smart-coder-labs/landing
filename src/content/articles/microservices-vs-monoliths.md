@@ -1,10 +1,3 @@
----
-title: "Microservicios vs Monolitos: Guía para Elegir Sabiamente"
-image: "/articles/microservices-vs-monoliths/images/portada.jpg"
-readTime: "14 min"
-publicationDate: "2024-07-29"
----
-
 ## Introducción
 
 La elección de la arquitectura de software es una de las decisiones más críticas al iniciar un nuevo proyecto o al evolucionar uno existente. Dos de los enfoques arquitectónicos más discutidos son los **Monolitos** y los **Microservicios**. Cada uno tiene sus propias ventajas, desventajas y casos de uso ideales. Entender estas diferencias es crucial para tomar una decisión informada que se alinee con los objetivos del negocio y las capacidades del equipo.

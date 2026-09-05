@@ -30,6 +30,48 @@ export type SeoInput = {
 
 const alternateAttr = 'data-seo-alternate';
 
+export type ResolvedSeo = {
+  title: string;
+  description: string;
+  canonical: string;
+  image: string;
+  type: string;
+  robots: string;
+  lang?: string;
+  alternates: { hreflang: string; href: string }[];
+  structuredData?: Record<string, unknown>;
+};
+
+/**
+ * Pure resolution of a route's metadata, shared by the browser hook and the
+ * build-time prerender so both emit exactly the same head.
+ */
+export function resolveSeo({ title, description, path, image, type = 'website', lang, structuredData, noIndex = false, alternates }: SeoInput): ResolvedSeo {
+  return {
+    title: title ? `${title} | ${siteName}` : homeTitle,
+    description: description || homeDescription,
+    canonical: `${siteUrl}${path}`,
+    image: image || homeImage,
+    type,
+    robots: noIndex ? 'noindex, follow' : 'index, follow',
+    lang,
+    alternates: Object.entries(alternates ?? {}).map(([hreflang, href]) => ({ hreflang, href: `${siteUrl}${href}` })),
+    structuredData,
+  };
+}
+
+/**
+ * During a build-time render there is no DOM to mutate, so the resolved head is
+ * recorded here and the prerender writes it into the static HTML. Without this
+ * every prerendered route would ship the homepage title and canonical.
+ */
+let serverHead: ResolvedSeo | null = null;
+export function takeServerHead(): ResolvedSeo | null {
+  const head = serverHead;
+  serverHead = null;
+  return head;
+}
+
 function setMeta(selector: string, attribute: 'name' | 'property', key: string, value: string) {
   let tag = document.head.querySelector<HTMLMetaElement>(selector);
   if (!tag) {
@@ -56,45 +98,47 @@ function setLink(rel: string, href: string) {
  * canonical, which tells search engines the page is a duplicate and keeps it out
  * of the index.
  */
-export function useSeo({ title, description, path, image, type = 'website', lang, structuredData, noIndex = false, alternates }: SeoInput) {
+export function useSeo(input: SeoInput) {
+  const resolved = resolveSeo(input);
+  // Recorded during render because effects never run in a build-time render.
+  if (typeof document === 'undefined') serverHead = resolved;
+
+  const serialized = JSON.stringify(resolved);
   useEffect(() => {
-    const resolvedTitle = title ? `${title} | ${siteName}` : homeTitle;
-    const resolvedDescription = description || homeDescription;
-    const resolvedUrl = `${siteUrl}${path}`;
-    const resolvedImage = image || homeImage;
+    const head: ResolvedSeo = JSON.parse(serialized);
 
-    document.title = resolvedTitle;
-    setMeta('meta[name="description"]', 'name', 'description', resolvedDescription);
-    setLink('canonical', resolvedUrl);
+    document.title = head.title;
+    setMeta('meta[name="description"]', 'name', 'description', head.description);
+    setLink('canonical', head.canonical);
 
-    setMeta('meta[property="og:title"]', 'property', 'og:title', resolvedTitle);
-    setMeta('meta[property="og:description"]', 'property', 'og:description', resolvedDescription);
-    setMeta('meta[property="og:url"]', 'property', 'og:url', resolvedUrl);
-    setMeta('meta[property="og:type"]', 'property', 'og:type', type);
-    setMeta('meta[property="og:image"]', 'property', 'og:image', resolvedImage);
-    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', resolvedTitle);
-    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', resolvedDescription);
-    setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', resolvedImage);
+    setMeta('meta[property="og:title"]', 'property', 'og:title', head.title);
+    setMeta('meta[property="og:description"]', 'property', 'og:description', head.description);
+    setMeta('meta[property="og:url"]', 'property', 'og:url', head.canonical);
+    setMeta('meta[property="og:type"]', 'property', 'og:type', head.type);
+    setMeta('meta[property="og:image"]', 'property', 'og:image', head.image);
+    setMeta('meta[name="twitter:title"]', 'name', 'twitter:title', head.title);
+    setMeta('meta[name="twitter:description"]', 'name', 'twitter:description', head.description);
+    setMeta('meta[name="twitter:image"]', 'name', 'twitter:image', head.image);
+    setMeta('meta[name="robots"]', 'name', 'robots', head.robots);
 
-    if (lang) document.documentElement.lang = lang;
-    setMeta('meta[name="robots"]', 'name', 'robots', noIndex ? 'noindex, follow' : 'index, follow');
+    if (head.lang) document.documentElement.lang = head.lang;
 
     document.head.querySelectorAll(`link[${alternateAttr}]`).forEach((node) => node.remove());
-    for (const [hreflang, href] of Object.entries(alternates ?? {})) {
+    for (const { hreflang, href } of head.alternates) {
       const link = document.createElement('link');
       link.rel = 'alternate';
       link.hreflang = hreflang;
-      link.href = `${siteUrl}${href}`;
+      link.href = href;
       link.setAttribute(alternateAttr, '');
       document.head.appendChild(link);
     }
 
     document.getElementById(structuredDataId)?.remove();
-    if (structuredData) {
+    if (head.structuredData) {
       const script = document.createElement('script');
       script.type = 'application/ld+json';
       script.id = structuredDataId;
-      script.textContent = JSON.stringify(structuredData);
+      script.textContent = JSON.stringify(head.structuredData);
       document.head.appendChild(script);
     }
 
@@ -102,5 +146,5 @@ export function useSeo({ title, description, path, image, type = 'website', lang
       document.getElementById(structuredDataId)?.remove();
       document.head.querySelectorAll(`link[${alternateAttr}]`).forEach((node) => node.remove());
     };
-  }, [title, description, path, image, type, lang, structuredData, noIndex, alternates]);
+  }, [serialized]);
 }

@@ -10,7 +10,7 @@ export const translations = {
     stack: { title: 'Technology in service of useful, operable products.', intro: 'We choose proven tools that help teams build, operate, improve, and own their products with confidence.', processTitle: 'A visible path from work to lasting capability.', process: [['Understand', 'Clarify the work, people, decisions, and constraints involved.'], ['Build', 'Design and deliver the product, tools, and AI capabilities together.'], ['Operate', 'Support use, learn from it, and improve the product with the team.']] },
     blog: { title: 'Notes from building, operating, and improving products.', intro: 'Practical writing on software, applied AI, and the systems behind useful work.', loading: 'Loading insights...', empty: 'No insights are published yet.', error: 'We could not load insights right now.', retry: 'Try again', read: 'Read article' },
     contact: { title: 'Build a more capable way of working.', intro: 'Tell us about the product, tool, AI capability, or team skill you want to strengthen.', panelSummary: 'A focused conversation is the first step toward a product your team can own and improve.', availabilityTitle: 'Open for product conversations', availabilityBody: 'Share the work that needs to move forward.', email: 'Email', based: 'Based in', location: 'Risaralda, Colombia', social: 'Social profiles', github: 'Open GitHub profile', linkedin: 'Open LinkedIn profile', x: 'Open X profile', youtube: 'Open YouTube channel', formLabel: 'Your brief', formHint: 'A few details are enough to start.', name: 'Full name', emailLabel: 'Email address', subject: 'What would you like to build or strengthen?', message: 'Tell us about your goal', actionNote: 'We will use your details only to respond to this inquiry.', error: 'We could not send your message. Please try again.', successTitle: 'Message received.', successBody: 'Thank you. We will reply as soon as possible.', sending: 'Sending...', send: 'Send message', sendingIcon: 'Sending' },
-    article: { loading: 'Loading article...', missing: 'No article was specified.', unavailable: 'This article could not be loaded.', notFound: 'This article is not published yet. Publish or seed it in Supabase, then try again.', read: 'read', back: 'Back to insights' },
+    article: { loading: 'Loading article...', missing: 'No article was specified.', unavailable: 'This article could not be loaded.', notFound: 'This article does not exist or is no longer published.', read: 'read', back: 'Back to insights' },
     notFound: { title: 'This page does not exist.', body: 'The link may be out of date, or the page may have moved.', action: 'Go to the homepage' },
     footer: { built: 'Software products, applied AI, and team capability.', navigation: 'Explore', rights: 'All rights reserved.' },
   },
@@ -23,7 +23,7 @@ export const translations = {
     stack: { title: 'Tecnología al servicio de productos útiles y operables.', intro: 'Elegimos herramientas probadas que ayudan a los equipos a construir, operar, mejorar y asumir sus productos con confianza.', processTitle: 'Una ruta visible del trabajo a una capacidad duradera.', process: [['Entender', 'Aclaramos el trabajo, las personas, las decisiones y las restricciones involucradas.'], ['Construir', 'Diseñamos y entregamos juntos el producto, las herramientas y las capacidades de IA.'], ['Operar', 'Acompañamos el uso, aprendemos de él y mejoramos el producto con el equipo.']] },
     blog: { title: 'Notas sobre construir, operar y mejorar productos.', intro: 'Escritura práctica sobre software, IA aplicada y los sistemas detrás del trabajo útil.', loading: 'Cargando ideas...', empty: 'Aún no hay ideas publicadas.', error: 'No pudimos cargar las ideas en este momento.', retry: 'Reintentar', read: 'Leer artículo' },
     contact: { title: 'Construye una forma de trabajar más capaz.', intro: 'Cuéntanos sobre el producto, herramienta, capacidad de IA o habilidad de equipo que quieres fortalecer.', panelSummary: 'Una conversación enfocada es el primer paso hacia un producto que tu equipo puede asumir y mejorar.', availabilityTitle: 'Abiertos a conversaciones de producto', availabilityBody: 'Comparte el trabajo que necesita avanzar.', email: 'Correo', based: 'Ubicación', location: 'Risaralda, Colombia', social: 'Perfiles sociales', github: 'Abrir perfil de GitHub', linkedin: 'Abrir perfil de LinkedIn', x: 'Abrir perfil de X', youtube: 'Abrir canal de YouTube', formLabel: 'Tu contexto', formHint: 'Unos pocos detalles bastan para empezar.', name: 'Nombre completo', emailLabel: 'Correo electrónico', subject: '¿Qué te gustaría construir o fortalecer?', message: 'Cuéntanos sobre tu objetivo', actionNote: 'Usaremos tus datos únicamente para responder a esta consulta.', error: 'No pudimos enviar tu mensaje. Inténtalo de nuevo.', successTitle: 'Mensaje recibido.', successBody: 'Gracias. Responderemos lo antes posible.', sending: 'Enviando...', send: 'Enviar mensaje', sendingIcon: 'Enviando' },
-    article: { loading: 'Cargando artículo...', missing: 'No se especificó un artículo.', unavailable: 'No fue posible cargar este artículo.', notFound: 'Este artículo aún no está publicado. Publícalo o siémbralo en Supabase e inténtalo de nuevo.', read: 'de lectura', back: 'Volver a ideas' },
+    article: { loading: 'Cargando artículo...', missing: 'No se especificó un artículo.', unavailable: 'No fue posible cargar este artículo.', notFound: 'Este artículo no existe o ya no está publicado.', read: 'de lectura', back: 'Volver a ideas' },
     notFound: { title: 'Esta página no existe.', body: 'El enlace puede estar desactualizado o la página pudo haberse movido.', action: 'Ir al inicio' },
     footer: { built: 'Productos de software, IA aplicada y capacidad de equipos.', navigation: 'Explorar', rights: 'Todos los derechos reservados.' },
   },
@@ -62,6 +62,7 @@ const LanguageContext = createContext<{ locale: Locale; t: Translation; setLocal
 
 function getStoredValue(key: string) {
   try {
+    if (typeof window === 'undefined') return null;
     return window.localStorage.getItem(key);
   } catch {
     return null;
@@ -94,6 +95,7 @@ const ThemeContext = createContext<{ theme: Theme; toggleTheme: () => void }>({ 
 function getInitialTheme(): Theme {
   const savedTheme = getStoredValue(themeStorageKey);
   if (savedTheme === 'light' || savedTheme === 'dark') return savedTheme;
+  if (typeof window === 'undefined') return 'dark';
   return window.matchMedia?.('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
 

@@ -1,65 +1,77 @@
-import { supabaseClient } from './supabase';
+/**
+ * Articles are build-time content, not runtime data.
+ *
+ * They used to be fetched from Supabase, which meant the served HTML carried no
+ * article text, social cards could not reference the private signed cover URLs,
+ * and a backend outage took the section down. Sourcing the markdown from the
+ * repository makes the content part of the build: always available, prerenderable
+ * and addressable.
+ */
 
-export type ArticleAsset = { id: string; object_path: string; alt_text: string; is_cover: boolean; signed_url?: string };
-export type ArticleTag = { name: string; slug: string };
-export type ArticleSnippet = { ordinal: number; language: string; code: string };
-export type ArticleSummary = { slug: string; title: string; description: string; read_time_minutes: number; published_at: string; cover_asset: ArticleAsset | null };
-export type Article = ArticleSummary & { content_markdown: string; tags: ArticleTag[]; assets: ArticleAsset[]; snippets: ArticleSnippet[] };
-
-type ArticleRow = Omit<Article, 'tags' | 'assets' | 'snippets'> & {
-  article_tags: { tags: ArticleTag | null }[];
-  article_assets: ArticleAsset[];
-  article_code_snippets: ArticleSnippet[];
+export type ArticleSummary = {
+  slug: string;
+  title: string;
+  description: string;
+  readTimeMinutes: number;
+  publishedAt: string;
+  coverImage: string;
+  coverAlt: string;
+  tags: string[];
 };
 
-const articleSelect = 'slug,title,description,read_time_minutes,published_at,content_markdown,cover_asset:article_assets!articles_cover_asset_id_fkey(id,object_path,alt_text,is_cover),article_tags(tags(name,slug)),article_assets!article_assets_article_id_fkey(id,object_path,alt_text,is_cover),article_code_snippets(ordinal,language,code)';
-const signedUrlTtlSeconds = 900;
+export type Article = ArticleSummary & { contentMarkdown: string };
 
-function toArticle(row: ArticleRow): Article {
-  return {
-    ...row,
-    cover_asset: row.cover_asset,
-    tags: row.article_tags.flatMap(({ tags }) => (tags ? [tags] : [])),
-    assets: row.article_assets,
-    snippets: row.article_code_snippets.sort((left, right) => left.ordinal - right.ordinal),
-  };
+type ArticleMetadata = {
+  title: string;
+  description: string;
+  tags: string[];
+  image: string;
+  readTime: string;
+  publicationDate: string;
+  slug: string;
+  isPublished?: boolean;
+};
+
+const metadataModules = import.meta.glob<ArticleMetadata>('../content/articles/*/metadata.json', { eager: true, import: 'default' });
+const bodyModules = import.meta.glob<string>('../content/articles/*.md', { eager: true, query: '?raw', import: 'default' });
+
+function slugFromPath(path: string) {
+  return path.replace(/^.*\/articles\//, '').replace(/(\/metadata\.json|\.md)$/, '');
 }
 
-async function getSignedAssetUrls(objectPaths: string[]): Promise<Record<string, string>> {
-  const uniquePaths = [...new Set(objectPaths)];
-  if (!uniquePaths.length) return {};
-
-  const { data, error } = await supabaseClient.storage.from('blog-assets').createSignedUrls(uniquePaths, signedUrlTtlSeconds);
-  if (error) throw new Error('Unable to load article assets.');
-
-  return Object.fromEntries(data.flatMap(({ path, signedUrl }) => signedUrl ? [[path, signedUrl]] : []));
+function readTimeMinutes(readTime: string, slug: string) {
+  const minutes = Number(/^(\d+)\s*min$/i.exec(readTime)?.[1]);
+  if (!minutes) throw new Error(`Invalid readTime for ${slug}; expected, for example, "10 min".`);
+  return minutes;
 }
 
-async function addSignedUrls<T extends { cover_asset: ArticleAsset | null }>(article: T, assets: ArticleAsset[] = []): Promise<T> {
-  const urls = await getSignedAssetUrls([
-    ...assets.map(({ object_path }) => object_path),
-    ...(article.cover_asset ? [article.cover_asset.object_path] : []),
-  ]);
+const articles: Article[] = Object.entries(metadataModules)
+  .map(([path, metadata]) => {
+    const slug = slugFromPath(path);
+    const bodyEntry = Object.entries(bodyModules).find(([bodyPath]) => slugFromPath(bodyPath) === slug);
+    if (!bodyEntry) throw new Error(`Missing markdown body for article "${slug}".`);
 
-  return {
-    ...article,
-    cover_asset: article.cover_asset && { ...article.cover_asset, signed_url: urls[article.cover_asset.object_path] },
-    ...(assets.length ? { assets: assets.map((asset) => ({ ...asset, signed_url: urls[asset.object_path] })) } : {}),
-  };
+    return {
+      slug,
+      title: metadata.title,
+      description: metadata.description,
+      readTimeMinutes: readTimeMinutes(metadata.readTime, slug),
+      publishedAt: metadata.publicationDate,
+      coverImage: metadata.image,
+      // No per-article alt text is authored, and the card already shows the
+      // title next to the image, so the title is the honest fallback.
+      coverAlt: metadata.title,
+      tags: metadata.tags,
+      contentMarkdown: bodyEntry[1],
+    };
+  })
+  .filter((article) => metadataModules[`../content/articles/${article.slug}/metadata.json`]?.isPublished !== false)
+  .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
+
+export function getPublishedArticles(): ArticleSummary[] {
+  return articles;
 }
 
-export async function getPublishedArticles(signal?: AbortSignal): Promise<ArticleSummary[]> {
-  const query = supabaseClient.from('articles').select('slug,title,description,read_time_minutes,published_at,cover_asset:article_assets!articles_cover_asset_id_fkey(id,object_path,alt_text,is_cover)').eq('is_published', true).order('published_at', { ascending: false });
-  const { data, error } = await (signal ? query.abortSignal(signal) : query);
-  if (error) throw new Error('Unable to load articles.');
-  return Promise.all((data as ArticleSummary[]).map((article) => addSignedUrls(article)));
-}
-
-export async function getPublishedArticle(slug: string): Promise<Article | null> {
-  const { data, error } = await supabaseClient.from('articles').select(articleSelect).eq('slug', slug).eq('is_published', true).maybeSingle();
-  if (error) throw new Error('Unable to load article.');
-  if (!data) return null;
-
-  const article = toArticle(data as ArticleRow);
-  return addSignedUrls(article, article.assets);
+export function getPublishedArticle(slug: string): Article | null {
+  return articles.find((article) => article.slug === slug) ?? null;
 }

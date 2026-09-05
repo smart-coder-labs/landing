@@ -1,26 +1,37 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import { getPublishedArticle, getPublishedArticles } from './articles';
 
-const { maybeSingle, select } = vi.hoisted(() => {
-  const maybeSingle = vi.fn();
-  const eq = vi.fn();
-  const query = { eq, maybeSingle };
-  eq.mockReturnValue(query);
-  const select = vi.fn(() => query);
-  return { maybeSingle, select };
-});
+describe('local article content', () => {
+  it('loads every article shipped in the repository, newest first', () => {
+    const articles = getPublishedArticles();
 
-vi.mock('./supabase', () => ({
-  supabaseClient: { from: vi.fn(() => ({ select })) },
-}));
+    expect(articles.length).toBeGreaterThanOrEqual(4);
+    const dates = articles.map((article) => article.publishedAt);
+    expect([...dates].sort().reverse()).toEqual(dates);
+  });
 
-import { getPublishedArticle } from './articles';
+  it('exposes complete metadata and a resolvable cover for each article', () => {
+    for (const article of getPublishedArticles()) {
+      expect(article.title).toBeTruthy();
+      expect(article.description).toBeTruthy();
+      expect(article.readTimeMinutes).toBeGreaterThan(0);
+      expect(article.publishedAt).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(article.tags.length).toBeGreaterThan(0);
+      // Public path, not a signed URL that expires.
+      expect(article.coverImage).toMatch(/^\/articles\/.+\.(png|jpe?g|webp)$/);
+      expect(article.coverAlt).toBeTruthy();
+    }
+  });
 
-describe('getPublishedArticle', () => {
-  it('selects article assets through their article foreign key', async () => {
-    maybeSingle.mockResolvedValue({ data: null, error: null });
+  it('serves the article body without leftover frontmatter', () => {
+    const article = getPublishedArticle('clean-code');
 
-    await expect(getPublishedArticle('microservices-vs-monoliths')).resolves.toBeNull();
+    expect(article).not.toBeNull();
+    expect(article?.contentMarkdown.startsWith('---')).toBe(false);
+    expect(article?.contentMarkdown.length).toBeGreaterThan(1000);
+  });
 
-    expect(select).toHaveBeenCalledWith(expect.stringContaining('article_assets!article_assets_article_id_fkey'));
+  it('returns null for an unknown slug', () => {
+    expect(getPublishedArticle('does-not-exist')).toBeNull();
   });
 });

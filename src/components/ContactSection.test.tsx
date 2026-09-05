@@ -6,9 +6,7 @@ import ContactSection from './ContactSection';
 const insert = vi.fn();
 
 vi.mock('../lib', () => ({
-  supabaseClient: {
-    from: () => ({ insert }),
-  },
+  getSupabaseClient: () => ({ from: () => ({ insert }) }),
 }));
 
 describe('ContactSection', () => {

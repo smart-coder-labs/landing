@@ -21,7 +21,7 @@ function Hero() {
         </div>
         <div className="hero-visual glass-panel">
           {/* Decorative: the headline already carries the message, so it stays out of the a11y tree. */}
-          <img src="/brand/hero-layers.jpg" alt="" width={1100} height={825} fetchPriority="high" decoding="async" />
+          <img src="/brand/hero-layers.jpg" alt="" width={1100} height={825} {...{ fetchpriority: 'high' }} decoding="async" />
         </div>
       </div>
       <div className="container hero-signals" aria-label={t.hero.disciplines}>

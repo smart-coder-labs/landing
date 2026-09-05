@@ -77,7 +77,7 @@ function AppContent() {
   );
 }
 
-function LocalizedApp() {
+export function LocalizedApp() {
   const { pathname } = useLocation();
   return <LanguageProvider locale={localeFromPath(pathname)}><AppContent /></LanguageProvider>;
 }
