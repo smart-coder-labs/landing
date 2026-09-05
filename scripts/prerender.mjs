@@ -35,7 +35,7 @@ if (emitted.includes(rootContainer)) {
   if (!template.includes(rootContainer)) throw new Error('Cached shell has no empty root container.');
 }
 
-const { render, routes } = await import(resolve(projectRoot, 'dist-ssg/entry-ssg.mjs')).catch((error) => {
+const { render, routes, sitemap } = await import(resolve(projectRoot, 'dist-ssg/entry-ssg.mjs')).catch((error) => {
   throw new Error(`Unable to load dist-ssg/entry-ssg.mjs: ${error.message}`);
 });
 
@@ -122,4 +122,23 @@ if (problems.length) {
   console.error(`\nPrerender produced incomplete pages:\n  ${problems.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`\nPrerendered ${written.length} routes; the shell alone carried ${textOf(template).split(' ').length} words.`);
+/*
+ * Generated here rather than kept in the repo, so publishing an article can
+ * never leave the sitemap behind. It is derived from the same content the pages
+ * were just rendered from.
+ */
+const siteUrl = process.env.SITE_URL || 'https://www.smartcoderlabs.com';
+const sitemapEntries = sitemap();
+const sitemapXml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${sitemapEntries.map(({ path, lastmod }) => `  <url>
+    <loc>${siteUrl}${path}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>${path.includes('/blog/') ? 'monthly' : 'weekly'}</changefreq>
+    <priority>${path.includes('/blog/') ? '0.8' : '1.0'}</priority>
+  </url>`).join('\n')}
+</urlset>
+`;
+await writeFile(resolve(distDir, 'sitemap.xml'), sitemapXml, 'utf8');
+
+console.log(`\nPrerendered ${written.length} routes and wrote sitemap.xml with ${sitemapEntries.length} URLs; the shell alone carried ${textOf(template).split(' ').length} words.`);
