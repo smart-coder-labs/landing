@@ -16,6 +16,9 @@ const HomePage: React.FC = () => {
   const { locale, t } = useLanguage();
   useSeo({
     path: locale === 'es' ? '/es' : '/',
+    // English falls back to the site defaults; Spanish needs its own title and
+    // description or it competes in Spanish results with English copy.
+    title: t.seoTitle || undefined,
     description: locale === 'es' ? t.hero.summary : undefined,
     type: 'website',
     lang: locale,
