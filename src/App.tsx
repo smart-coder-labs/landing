@@ -2,8 +2,9 @@ import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import { LanguageProvider, ThemeProvider, useLanguage } from './i18n';
+import { LanguageProvider, ThemeProvider, localeFromPath, useLanguage } from './i18n';
 import HomePage from './pages/HomePage';
+import NotFoundPage from './components/NotFoundPage';
 
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
 
@@ -60,7 +61,12 @@ function AppContent() {
             <Suspense fallback={<div className="article-page"><div className="glass-panel status-card">{t.loadingPage}</div></div>}>
               <Routes>
                 <Route path="/" element={<HomePage />} />
+                <Route path="/es" element={<HomePage />} />
+                {/* Articles have a single language version, so both locale shells
+                    render the same post and the canonical always points at /blog. */}
                 <Route path="/blog/:articleSlug" element={<ArticlePage />} />
+                <Route path="/es/blog/:articleSlug" element={<ArticlePage />} />
+                <Route path="*" element={<NotFoundPage />} />
               </Routes>
             </Suspense>
           </main>
@@ -71,9 +77,14 @@ function AppContent() {
   );
 }
 
+function LocalizedApp() {
+  const { pathname } = useLocation();
+  return <LanguageProvider locale={localeFromPath(pathname)}><AppContent /></LanguageProvider>;
+}
+
 function App() {
   return (
-      <ThemeProvider><LanguageProvider><BrowserRouter><AppContent /></BrowserRouter></LanguageProvider></ThemeProvider>
+    <ThemeProvider><BrowserRouter><LocalizedApp /></BrowserRouter></ThemeProvider>
   );
 }
 

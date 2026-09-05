@@ -48,8 +48,9 @@ async function addSignedUrls<T extends { cover_asset: ArticleAsset | null }>(art
   };
 }
 
-export async function getPublishedArticles(): Promise<ArticleSummary[]> {
-  const { data, error } = await supabaseClient.from('articles').select('slug,title,description,read_time_minutes,published_at,cover_asset:article_assets!articles_cover_asset_id_fkey(id,object_path,alt_text,is_cover)').eq('is_published', true).order('published_at', { ascending: false });
+export async function getPublishedArticles(signal?: AbortSignal): Promise<ArticleSummary[]> {
+  const query = supabaseClient.from('articles').select('slug,title,description,read_time_minutes,published_at,cover_asset:article_assets!articles_cover_asset_id_fkey(id,object_path,alt_text,is_cover)').eq('is_published', true).order('published_at', { ascending: false });
+  const { data, error } = await (signal ? query.abortSignal(signal) : query);
   if (error) throw new Error('Unable to load articles.');
   return Promise.all((data as ArticleSummary[]).map((article) => addSignedUrls(article)));
 }

@@ -9,7 +9,10 @@ const { getPublishedArticle } = vi.hoisted(() => ({
   getPublishedArticle: vi.fn(),
 }));
 
-vi.mock('../lib', () => ({ getPublishedArticle }));
+vi.mock('../lib', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../lib')>()),
+  getPublishedArticle,
+}));
 
 function NavigateToSecondArticle() {
   const navigate = useNavigate();

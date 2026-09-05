@@ -1,0 +1,9 @@
+{
+  "title": "Microservicios vs Monolitos: Guía para Elegir Sabiamente",
+  "description": "Un análisis detallado sobre cuándo y por qué elegir arquitecturas de microservicios o monolíticas, comparando sus características y casos de uso.",
+  "tags": ["microservicios", "monolitos", "arquitectura de software", "distribuited systems", "devops"],
+  "image": "/articles/microservices-vs-monoliths/images/portada.png",
+  "readTime": "14 min",
+  "publicationDate": "2024-07-29",
+  "slug": "microservices-vs-monoliths"
+}

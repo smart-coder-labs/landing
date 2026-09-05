@@ -1,5 +1,6 @@
 import { ArrowDownRight, Network } from 'lucide-react';
 import { useLanguage } from '../i18n';
+import Reveal from './Reveal';
 
 function Hero() {
   const { t } = useLanguage();
@@ -18,18 +19,22 @@ function Hero() {
             {t.hero.tags.map((tag) => <span className="meta-pill" key={tag}>{tag}</span>)}
           </div>
         </div>
-        <div className="hero-signals" aria-label={t.hero.disciplines}>
-          <article className="signal-card work-signal-card glass-panel">
-            <span className="signal-eyebrow">{t.hero.signalLabel}</span>
-            <strong className="signal-title">{t.hero.signal}</strong>
-            <p className="signal-description">{t.hero.signalBody}</p>
-          </article>
-          <article className="signal-card signal-card-offset glass-panel">
-            <span>{t.hero.capabilityLabel}</span>
-            <strong>{t.hero.capability}</strong>
-            <p>{t.hero.capabilityBody}</p>
-          </article>
+        <div className="hero-visual glass-panel">
+          {/* Decorative: the headline already carries the message, so it stays out of the a11y tree. */}
+          <img src="/brand/hero-layers.jpg" alt="" width={1100} height={825} fetchPriority="high" decoding="async" />
         </div>
+      </div>
+      <div className="container hero-signals" aria-label={t.hero.disciplines}>
+        <Reveal as="article" className="signal-card">
+          <span className="signal-eyebrow">{t.hero.signalLabel}</span>
+          <strong className="signal-title">{t.hero.signal}</strong>
+          <p className="signal-description">{t.hero.signalBody}</p>
+        </Reveal>
+        <Reveal as="article" className="signal-card" index={1}>
+          <span>{t.hero.capabilityLabel}</span>
+          <strong>{t.hero.capability}</strong>
+          <p>{t.hero.capabilityBody}</p>
+        </Reveal>
       </div>
     </section>
   );

@@ -1,9 +1,9 @@
 import { Network } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useLanguage } from '../i18n';
+import { localeHref, useLanguage } from '../i18n';
 
 function Footer() {
-  const { t } = useLanguage();
+  const { locale, t } = useLanguage();
   const year = new Date().getFullYear();
   return (
     <footer className="site-footer">
@@ -15,7 +15,7 @@ function Footer() {
           </div>
           <nav className="footer-navigation" aria-label={t.nav.footer}>
             <p className="footer-label">{t.footer.navigation}</p>
-            <div className="footer-nav"><Link to="/#about">{t.nav.about}</Link><Link to="/#services">{t.nav.services}</Link><Link to="/#blog">{t.nav.insights}</Link><Link to="/#contact">{t.nav.contact}</Link></div>
+            <div className="footer-nav"><Link to={localeHref(locale, '/#about')}>{t.nav.about}</Link><Link to={localeHref(locale, '/#services')}>{t.nav.services}</Link><Link to={localeHref(locale, '/#blog')}>{t.nav.insights}</Link><Link to={localeHref(locale, '/#contact')}>{t.nav.contact}</Link></div>
           </nav>
         </div>
         <div className="footer-meta">

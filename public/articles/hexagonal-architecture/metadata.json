@@ -1,0 +1,9 @@
+{
+  "title": "Arquitectura Hexagonal: Diseñando sistemas mantenibles",
+  "description": "Aprende cómo la arquitectura hexagonal puede mejorar la mantenibilidad y testabilidad de tus aplicaciones. Exploramos sus componentes, ventajas y un caso práctico.",
+  "tags": ["arquitectura", "software design", "hexagonal architecture", "ports and adapters", "desarrollo de software"],
+  "image": "/articles/hexagonal-architecture/images/portada.png",
+  "readTime": "10 min",
+  "publicationDate": "2024-07-26",
+  "slug": "hexagonal-architecture"
+}

@@ -15,7 +15,6 @@
     "@smart-coder-labs/eslint-config": "^1.0.2",
     "@smart-coder-labs/vite-config": "^1.0.2",
     "@supabase/supabase-js": "^2.50.2",
-    "framer-motion": "^12.23.24",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

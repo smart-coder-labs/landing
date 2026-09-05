@@ -2,6 +2,7 @@ import { ArrowUpRight, Github, Linkedin, Loader2, Mail, MapPin, Send, Twitter, Y
 import { FormEvent, useState } from 'react';
 import { supabaseClient } from '../lib';
 import { useLanguage } from '../i18n';
+import Reveal from './Reveal';
 
 type FormValues = { name: string; email: string; subject: string; message: string; };
 const emptyForm: FormValues = { name: '', email: '', subject: '', message: '' };
@@ -25,10 +26,10 @@ function ContactSection() {
   return (
     <section id="contact" className="section" aria-labelledby="contact-title">
       <div className="container">
-        <div className="section-heading"><p className="eyebrow">{t.contact.eyebrow}</p><h2 id="contact-title">{t.contact.title}</h2><p>{t.contact.intro}</p></div>
+        <Reveal className="section-heading"><h2 id="contact-title">{t.contact.title}</h2><p>{t.contact.intro}</p></Reveal>
         <div className="contact-grid">
-          <aside className="contact-info-panel glass-panel card">
-            <div className="contact-panel-heading"><p>{t.contact.panelLabel}</p><h3>SmartCoderLabs</h3></div>
+          <Reveal as="aside" className="contact-info-panel glass-panel card">
+            <div className="contact-panel-heading"><h3>SmartCoderLabs</h3></div>
             <p className="contact-panel-summary">{t.contact.panelSummary}</p>
             <div className="contact-availability"><span aria-hidden="true" /><div><strong>{t.contact.availabilityTitle}</strong><p>{t.contact.availabilityBody}</p></div></div>
             <div className="contact-details">
@@ -40,10 +41,10 @@ function ContactSection() {
             <a className="icon-button" href="https://x.com/CesarPuentesDev" target="_blank" rel="noopener noreferrer" aria-label={t.contact.x}><Twitter size={18} /></a>
             <a className="icon-button" href="https://www.youtube.com/@SmartCoderLabs" target="_blank" rel="noopener noreferrer" aria-label={t.contact.youtube}><Youtube size={18} /></a>
             </div>
-          </aside>
-          <div className="contact-form-panel glass-panel card">
+          </Reveal>
+          <Reveal className="contact-form-panel glass-panel card" index={1}>
             {status === 'success' ? <div className="form-success" role="status"><Send size={24} aria-hidden="true" /><h3>{t.contact.successTitle}</h3><p>{t.contact.successBody}</p></div> : <form onSubmit={handleSubmit}>
-              <div className="contact-form-heading"><span>{t.contact.formLabel}</span><p>{t.contact.formHint}</p></div>
+              <div className="contact-form-heading"><h3>{t.contact.formLabel}</h3><p>{t.contact.formHint}</p></div>
               <div className="form-grid">
                 <div className="form-field"><label htmlFor="name">{t.contact.name}</label><input id="name" name="name" value={values.name} onChange={(event) => setValues({ ...values, name: event.target.value })} required autoComplete="name" /></div>
                 <div className="form-field"><label htmlFor="email">{t.contact.emailLabel}</label><input id="email" name="email" type="email" value={values.email} onChange={(event) => setValues({ ...values, email: event.target.value })} required autoComplete="email" /></div>
@@ -56,7 +57,7 @@ function ContactSection() {
                 <button className="button button-primary" type="submit" disabled={status === 'loading'}>{status === 'loading' ? <Loader2 size={17} aria-label={t.contact.sendingIcon} /> : <ArrowUpRight size={17} aria-hidden="true" />} {status === 'loading' ? t.contact.sending : t.contact.send}</button>
               </div>
             </form>}
-          </div>
+          </Reveal>
         </div>
       </div>
     </section>
