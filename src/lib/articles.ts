@@ -46,6 +46,9 @@ function readTimeMinutes(readTime: string, slug: string) {
 }
 
 const articles: Article[] = Object.entries(metadataModules)
+  // Drafts stay in the repository but never reach the site, the sitemap or the
+  // prerender, so publishing can be paced without moving files around.
+  .filter(([, metadata]) => metadata.isPublished !== false)
   .map(([path, metadata]) => {
     const slug = slugFromPath(path);
     const bodyEntry = Object.entries(bodyModules).find(([bodyPath]) => slugFromPath(bodyPath) === slug);
@@ -65,7 +68,6 @@ const articles: Article[] = Object.entries(metadataModules)
       contentMarkdown: bodyEntry[1],
     };
   })
-  .filter((article) => metadataModules[`../content/articles/${article.slug}/metadata.json`]?.isPublished !== false)
   .sort((left, right) => right.publishedAt.localeCompare(left.publishedAt));
 
 export function getPublishedArticles(): ArticleSummary[] {

@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import { LanguageProvider, ThemeProvider, localeFromPath, useLanguage } from './i18n';
 import HomePage from './pages/HomePage';
 import NotFoundPage from './components/NotFoundPage';
+import BlogIndexPage from './pages/BlogIndexPage';
 
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
 
@@ -64,6 +65,8 @@ function AppContent() {
                 <Route path="/es" element={<HomePage />} />
                 {/* Articles have a single language version, so both locale shells
                     render the same post and the canonical always points at /blog. */}
+                <Route path="/blog" element={<BlogIndexPage />} />
+                <Route path="/es/blog" element={<BlogIndexPage />} />
                 <Route path="/blog/:articleSlug" element={<ArticlePage />} />
                 <Route path="/es/blog/:articleSlug" element={<ArticlePage />} />
                 <Route path="*" element={<NotFoundPage />} />

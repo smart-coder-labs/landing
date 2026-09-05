@@ -1,0 +1,15 @@
+{
+  "title": "Fine-tuning, RAG o prompting: cómo decidir",
+  "description": "Tres formas de adaptar un modelo a tu dominio, con costos y límites distintos. Un marco para elegir sin probar a ciegas.",
+  "tags": [
+    "fine-tuning",
+    "rag",
+    "llm",
+    "ia aplicada",
+    "decisiones tecnicas"
+  ],
+  "image": "/articles/fine-tuning-rag-o-prompting/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-08-20",
+  "slug": "fine-tuning-rag-o-prompting"
+}

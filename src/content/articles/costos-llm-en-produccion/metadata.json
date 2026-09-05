@@ -1,0 +1,15 @@
+{
+  "title": "Costos de LLM en producción: dónde se va el presupuesto",
+  "description": "El precio por token rara vez es el problema. Las fugas reales están en el contexto inflado, los reintentos y el reprocesamiento.",
+  "tags": [
+    "costos",
+    "llm",
+    "produccion",
+    "optimizacion",
+    "ia aplicada"
+  ],
+  "image": "/articles/costos-llm-en-produccion/images/portada.jpg",
+  "readTime": "8 min",
+  "publicationDate": "2026-08-17",
+  "slug": "costos-llm-en-produccion"
+}

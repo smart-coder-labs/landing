@@ -15,6 +15,7 @@ export function sitemap(): { path: string; lastmod: string }[] {
   return [
     { path: '/', lastmod: newest },
     { path: '/es', lastmod: newest },
+    { path: '/blog', lastmod: newest },
     ...articles.map((article) => ({ path: `/blog/${article.slug}`, lastmod: article.publishedAt })),
   ];
 }
@@ -24,6 +25,7 @@ export function routes(): string[] {
   const slugs = getPublishedArticles().map((article) => article.slug);
   return [
     ...Object.values(localePrefix).map((prefix) => prefix || '/'),
+    ...Object.values(localePrefix).map((prefix) => `${prefix}/blog`),
     ...Object.values(localePrefix).flatMap((prefix) => slugs.map((slug) => `${prefix}/blog/${slug}`)),
   ];
 }

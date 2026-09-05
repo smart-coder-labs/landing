@@ -1,0 +1,15 @@
+{
+  "title": "Infraestructura como código: los errores que más cuestan",
+  "description": "Escribir la infraestructura en archivos no es el logro. Lo difícil es el estado, los secretos y la deriva.",
+  "tags": [
+    "infraestructura",
+    "iac",
+    "devops",
+    "operaciones",
+    "automatizacion"
+  ],
+  "image": "/articles/infraestructura-como-codigo-errores/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-06-15",
+  "slug": "infraestructura-como-codigo-errores"
+}

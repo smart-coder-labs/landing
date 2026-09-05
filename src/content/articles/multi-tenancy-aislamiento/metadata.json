@@ -1,0 +1,15 @@
+{
+  "title": "Multi-tenancy: aislamiento de datos por diseño",
+  "description": "Tres modelos de aislamiento con costos muy distintos. Cómo elegir y qué controles hacen falta en cada uno.",
+  "tags": [
+    "multi-tenancy",
+    "arquitectura",
+    "seguridad",
+    "saas",
+    "base de datos"
+  ],
+  "image": "/articles/multi-tenancy-aislamiento/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-07-13",
+  "slug": "multi-tenancy-aislamiento"
+}

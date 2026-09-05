@@ -1,0 +1,15 @@
+{
+  "title": "Bases de datos vectoriales: cuándo las necesitas de verdad",
+  "description": "Antes de sumar una pieza de infraestructura, revisa si tu base de datos actual ya resuelve el problema. Muchas veces lo hace.",
+  "tags": [
+    "vector database",
+    "arquitectura",
+    "rag",
+    "datos",
+    "decisiones tecnicas"
+  ],
+  "image": "/articles/vector-databases-cuando-usarlas/images/portada.jpg",
+  "readTime": "8 min",
+  "publicationDate": "2026-08-06",
+  "slug": "vector-databases-cuando-usarlas"
+}

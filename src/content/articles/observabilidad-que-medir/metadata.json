@@ -1,0 +1,15 @@
+{
+  "title": "Observabilidad: qué medir antes de que se caiga",
+  "description": "Métricas, trazas y registros no son lo mismo que observabilidad. Qué instrumentar para poder responder preguntas que no anticipaste.",
+  "tags": [
+    "observabilidad",
+    "operaciones",
+    "arquitectura",
+    "monitoreo",
+    "confiabilidad"
+  ],
+  "image": "/articles/observabilidad-que-medir/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-07-30",
+  "slug": "observabilidad-que-medir"
+}

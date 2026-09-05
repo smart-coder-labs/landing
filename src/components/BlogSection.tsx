@@ -4,10 +4,14 @@ import { localeHref, useLanguage } from '../i18n';
 import { getPublishedArticles } from '../lib';
 import Reveal from './Reveal';
 
+const previewCount = 6;
+
 function BlogSection() {
   const { locale, t } = useLanguage();
   // Build-time content: there is nothing to wait for and nothing to fail.
-  const blogPosts = getPublishedArticles();
+  const allPosts = getPublishedArticles();
+  // The homepage previews the latest; the full archive lives at /blog.
+  const blogPosts = allPosts.slice(0, previewCount);
 
   return (
     <section id="blog" className="section" aria-labelledby="insights-title">
@@ -18,6 +22,9 @@ function BlogSection() {
           <img src={post.coverImage} alt="" width={620} height={400} loading="lazy" decoding="async" />
           <div className="article-card-body"><div className="article-meta"><Clock size={13} aria-hidden="true" /> {post.readTimeMinutes} min</div><h3>{post.title}</h3><p>{post.description}</p><Link className="text-link" to={localeHref(locale, `/blog/${post.slug}`)}>{t.blog.read} <ArrowRight size={15} aria-hidden="true" /></Link></div>
         </Reveal>)}</div>}
+        {allPosts.length > previewCount && <Reveal className="section-action">
+          <Link className="button button-secondary" to={localeHref(locale, '/blog')}>{t.blog.viewAll} <ArrowRight size={15} aria-hidden="true" /></Link>
+        </Reveal>}
       </div>
     </section>
   );

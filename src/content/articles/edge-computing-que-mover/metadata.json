@@ -1,0 +1,15 @@
+{
+  "title": "Edge computing: qué conviene mover al borde y qué no",
+  "description": "Ejecutar cerca del usuario reduce latencia pero cambia las reglas sobre datos y estado. Un criterio para decidir.",
+  "tags": [
+    "edge",
+    "rendimiento",
+    "arquitectura",
+    "cdn",
+    "infraestructura"
+  ],
+  "image": "/articles/edge-computing-que-mover/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-06-08",
+  "slug": "edge-computing-que-mover"
+}
