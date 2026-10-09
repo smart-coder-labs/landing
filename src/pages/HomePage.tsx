@@ -1,22 +1,27 @@
-import React from 'react';
-import Hero from '../components/Hero';
-import About from '../components/About';
-import ServicesSection from '../components/ServicesSection';
-import TechStackSection from '../components/TechStackSection';
-import BlogSection from '../components/BlogSection';
-import ContactSection from '../components/ContactSection';
+import { useRef } from "react";
+import { useLandingInteractions } from "../components/globant/useLandingInteractions";
+import GlobantHero from "../components/globant/GlobantHero";
+import GlobantIntro from "../components/globant/GlobantIntro";
+import GlobantCapabilities from "../components/globant/GlobantCapabilities";
+import GlobantCore from "../components/globant/GlobantCore";
+import GlobantPrinciples from "../components/globant/GlobantPrinciples";
+import GlobantProjects from "../components/globant/GlobantProjects";
+import GlobantInsights from "../components/globant/GlobantInsights";
+import GlobantContact from "../components/globant/GlobantContact";
 
-const HomePage: React.FC = () => {
+export default function HomePage() {
+  const ref = useRef<HTMLElement>(null);
+  useLandingInteractions(ref);
   return (
-    <>
-      <Hero />
-      <About />
-      <ServicesSection />
-      <TechStackSection />
-      <BlogSection />
-      <ContactSection />
-    </>
+    <main id="contenido" ref={ref}>
+      <GlobantHero />
+      <GlobantIntro />
+      <GlobantCapabilities />
+      <GlobantCore />
+      <GlobantPrinciples />
+      <GlobantProjects />
+      <GlobantInsights />
+      <GlobantContact />
+    </main>
   );
-};
-
-export default HomePage;
+}

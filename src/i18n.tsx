@@ -48,8 +48,11 @@ function setStoredValue(key: string, value: string) {
   }
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState<Locale>(() => getStoredValue(storageKey) === 'es' ? 'es' : 'en');
+export function LanguageProvider({ children, defaultLocale = 'en' }: { children: ReactNode; defaultLocale?: Locale }) {
+  const [locale, setLocale] = useState<Locale>(() => {
+    const saved = getStoredValue(storageKey);
+    return saved === 'es' || saved === 'en' ? saved : defaultLocale;
+  });
   useEffect(() => { setStoredValue(storageKey, locale); document.documentElement.lang = locale; }, [locale]);
   return <LanguageContext.Provider value={{ locale, t: translations[locale], setLocale }}>{children}</LanguageContext.Provider>;
 }

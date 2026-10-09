@@ -24,3 +24,8 @@ dist-ssr
 *.sw?
 .env
 
+
+# Local visual review artifacts and private-registry preview fallback
+.impeccable/review/
+vite.local.ts
+tsconfig.local.json

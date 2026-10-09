@@ -1,18 +1,21 @@
 import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import { LanguageProvider, ThemeProvider, useLanguage } from './i18n';
+import Header from './components/globant/GlobantHeader';
+import Footer from './components/globant/GlobantFooter';
+import { LanguageProvider, useLanguage } from './i18n';
 import HomePage from './pages/HomePage';
 
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
+const ContactPage = lazy(() => import('./components/ContactSection'));
 
 function ScrollToRoute() {
   const { pathname, hash } = useLocation();
 
   useEffect(() => {
     const scrollToHash = () => {
-      const target = hash ? document.getElementById(hash.slice(1)) : null;
+      const aliases: Record<string, string> = { about: 'enfoque', services: 'capacidades', blog: 'ideas', contact: 'contacto', stack: 'proyectos' };
+      const id = hash.slice(1);
+      const target = hash ? document.getElementById(aliases[id] || id) : null;
       if (!target) return false;
 
       const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
@@ -52,28 +55,22 @@ function AppContent() {
   return (
     <>
       <ScrollToRoute />
-      <a className="skip-link" href="#main-content">{t.skip}</a>
-      <div className="site-shell">
-        <Header />
-        <div className="site-content">
-          <main id="main-content" className="site-main">
-            <Suspense fallback={<div className="article-page"><div className="glass-panel status-card">{t.loadingPage}</div></div>}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/blog/:articleSlug" element={<ArticlePage />} />
-              </Routes>
-            </Suspense>
-          </main>
-          <Footer />
-        </div>
-      </div>
+      <Header />
+      <Suspense fallback={<div className="g-route-status" role="status">{t.loadingPage}</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/blog/:articleSlug" element={<main id="contenido"><ArticlePage /></main>} />
+          <Route path="/contacto" element={<main id="contenido"><ContactPage /></main>} />
+        </Routes>
+      </Suspense>
+      <Footer />
     </>
   );
 }
 
 function App() {
   return (
-      <ThemeProvider><LanguageProvider><BrowserRouter><AppContent /></BrowserRouter></LanguageProvider></ThemeProvider>
+      <LanguageProvider defaultLocale="es"><BrowserRouter><AppContent /></BrowserRouter></LanguageProvider>
   );
 }
 
