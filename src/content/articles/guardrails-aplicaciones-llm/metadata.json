@@ -1,0 +1,15 @@
+{
+  "title": "Guardrails en aplicaciones con LLM: qué proteger y cómo",
+  "description": "Inyección de instrucciones, fuga de datos y acciones no autorizadas. Controles concretos para sistemas con modelos de lenguaje.",
+  "tags": [
+    "seguridad",
+    "llm",
+    "ia aplicada",
+    "guardrails",
+    "arquitectura"
+  ],
+  "image": "/articles/guardrails-aplicaciones-llm/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-08-13",
+  "slug": "guardrails-aplicaciones-llm"
+}

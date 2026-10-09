@@ -9,7 +9,16 @@ import GlobantProjects from "../components/globant/GlobantProjects";
 import GlobantInsights from "../components/globant/GlobantInsights";
 import GlobantContact from "../components/globant/GlobantContact";
 
+import { useSeo } from '../lib/seo';
+
 export default function HomePage() {
+  useSeo({
+    path: '/',
+    title: 'Ingeniería de software e IA aplicada',
+    description: 'Productos de software, backend e inteligencia artificial aplicada. Diseñamos, construimos y evolucionamos herramientas con tu equipo.',
+    type: 'website',
+    lang: 'es',
+  });
   const ref = useRef<HTMLElement>(null);
   useLandingInteractions(ref);
   return (

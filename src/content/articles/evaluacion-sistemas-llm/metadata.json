@@ -1,0 +1,15 @@
+{
+  "title": "Cómo evaluar un sistema con LLM sin engañarte",
+  "description": "Probar tres ejemplos a mano no es evaluar. Cómo montar una medición honesta de un sistema con modelos de lenguaje.",
+  "tags": [
+    "evaluacion",
+    "llm",
+    "ia aplicada",
+    "calidad",
+    "metricas"
+  ],
+  "image": "/articles/evaluacion-sistemas-llm/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-08-28",
+  "slug": "evaluacion-sistemas-llm"
+}

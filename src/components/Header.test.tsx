@@ -1,11 +1,21 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import Header from './Header';
-import { LanguageProvider, ThemeProvider } from '../i18n';
+import { LanguageProvider, ThemeProvider, type Locale } from '../i18n';
 
 function renderHeader() {
   return render(<ThemeProvider><LanguageProvider><BrowserRouter><Header /></BrowserRouter></LanguageProvider></ThemeProvider>);
+}
+
+function renderHeaderAt(path: string, locale: Locale) {
+  return render(
+    <ThemeProvider>
+      <MemoryRouter initialEntries={[path]}>
+        <LanguageProvider locale={locale}><Header /></LanguageProvider>
+      </MemoryRouter>
+    </ThemeProvider>,
+  );
 }
 
 afterEach(() => {
@@ -25,15 +35,32 @@ describe('Header', () => {
     expect(screen.getByRole('navigation', { name: 'Mobile navigation' })).toHaveTextContent('Contact');
   });
 
-  it('changes language, updates the document language, and persists the selection', async () => {
-    const user = userEvent.setup();
-    renderHeader();
+  it('exposes each language as a real URL so both can be linked and indexed', () => {
+    renderHeaderAt('/', 'en');
 
-    await user.click(screen.getByRole('button', { name: 'ES' }));
+    // English is served unprefixed, so every existing URL keeps working.
+    expect(screen.getByRole('link', { name: 'ES' })).toHaveAttribute('href', '/es');
+    expect(screen.getByRole('link', { name: 'ES' })).toHaveAttribute('hreflang', 'es');
+    expect(screen.getByText('EN')).toHaveAttribute('aria-current', 'true');
+    // The same items render in the desktop and mobile navs, so scope the query.
+    const nav = within(screen.getByRole('navigation', { name: 'Primary navigation' }));
+    expect(nav.getByRole('link', { name: 'How we work' })).toHaveAttribute('href', '/#about');
+  });
 
-    await waitFor(() => expect(document.documentElement.lang).toBe('es'));
-    expect(localStorage.getItem('smartcoder-locale')).toBe('es');
+  it('prefixes navigation with the locale and links back to English from Spanish', () => {
+    renderHeaderAt('/es', 'es');
+
     expect(screen.getByRole('navigation', { name: 'Navegación principal' })).toHaveTextContent('Qué construimos');
+    const nav = within(screen.getByRole('navigation', { name: 'Navegación principal' }));
+    expect(nav.getByRole('link', { name: 'Cómo trabajamos' })).toHaveAttribute('href', '/es#about');
+    expect(screen.getByRole('link', { name: 'EN' })).toHaveAttribute('href', '/');
+    expect(screen.getByText('ES')).toHaveAttribute('aria-current', 'true');
+  });
+
+  it('keeps the reader on the same article when switching language', () => {
+    renderHeaderAt('/blog/clean-code', 'en');
+
+    expect(screen.getByRole('link', { name: 'ES' })).toHaveAttribute('href', '/es/blog/clean-code');
   });
 
   it('toggles the theme, exposes its state, and persists it', async () => {

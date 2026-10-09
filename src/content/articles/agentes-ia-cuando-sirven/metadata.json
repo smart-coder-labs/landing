@@ -1,0 +1,15 @@
+{
+  "title": "Agentes de IA: cuándo sirven y cuándo son un rodeo caro",
+  "description": "No todo flujo con IA necesita un agente. Cómo distinguir los casos donde la autonomía aporta de los que solo agregan latencia y costo.",
+  "tags": [
+    "agentes",
+    "ia aplicada",
+    "arquitectura",
+    "automatizacion",
+    "llm"
+  ],
+  "image": "/articles/agentes-ia-cuando-sirven/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-08-24",
+  "slug": "agentes-ia-cuando-sirven"
+}

@@ -1,0 +1,15 @@
+{
+  "title": "Feature flags como herramienta de producto, no solo técnica",
+  "description": "Separar despliegue de lanzamiento cambia cómo se trabaja. También genera una deuda propia si no se gestiona.",
+  "tags": [
+    "feature flags",
+    "despliegue",
+    "producto",
+    "entrega continua",
+    "ingenieria"
+  ],
+  "image": "/articles/feature-flags-como-herramienta/images/portada.jpg",
+  "readTime": "8 min",
+  "publicationDate": "2026-06-25",
+  "slug": "feature-flags-como-herramienta"
+}

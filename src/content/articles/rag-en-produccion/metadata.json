@@ -1,0 +1,15 @@
+{
+  "title": "RAG en producción: lo que se rompe al salir del prototipo",
+  "description": "Un prototipo de RAG funciona en una tarde. Sostenerlo en producción es otro problema: recuperación, frescura, costos y evaluación.",
+  "tags": [
+    "rag",
+    "ia aplicada",
+    "llm",
+    "arquitectura",
+    "produccion"
+  ],
+  "image": "/articles/rag-en-produccion/images/portada.jpg",
+  "readTime": "11 min",
+  "publicationDate": "2026-09-01",
+  "slug": "rag-en-produccion"
+}

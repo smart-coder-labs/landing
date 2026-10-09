@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 400" width="620" height="400" role="img" aria-label="SmartCoderLabs article">
+  <defs>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1c2230"/>
+      <stop offset="1" stop-color="#0f131c"/>
+    </linearGradient>
+    <pattern id="grid" width="52" height="52" patternUnits="userSpaceOnUse">
+      <path d="M52 0H0v52" fill="none" stroke="#8fa2bd" stroke-opacity="0.14" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="fade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
+    <mask id="gridMask"><rect width="620" height="400" fill="url(#fade)"/></mask>
+  </defs>
+  <rect width="620" height="400" fill="url(#ground)"/>
+  <rect width="620" height="400" fill="url(#grid)" mask="url(#gridMask)"/>
+  <rect x="0" y="0" width="4" height="400" fill="#77c4ea"/>
+  <g fill="none" stroke="#77c4ea" stroke-width="2" stroke-linecap="round" opacity="0.85" transform="translate(268 166)">
+    <circle cx="42" cy="12" r="10"/>
+    <circle cx="14" cy="56" r="10"/>
+    <circle cx="70" cy="56" r="10"/>
+    <path d="M36 21 20 47M48 21l16 26"/>
+  </g>
+</svg>

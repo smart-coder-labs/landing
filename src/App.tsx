@@ -2,11 +2,30 @@ import { Suspense, lazy, useEffect } from 'react';
 import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
 import Header from './components/globant/GlobantHeader';
 import Footer from './components/globant/GlobantFooter';
-import { LanguageProvider, useLanguage } from './i18n';
+import { LanguageProvider, localeFromPath, localePrefix, useLanguage } from './i18n';
+
 import HomePage from './pages/HomePage';
+import { useSeo } from './lib/seo';
+import NotFoundPage from './components/NotFoundPage';
+import BlogIndexPage from './pages/BlogIndexPage';
 
 const ArticlePage = lazy(() => import('./components/ArticlePage'));
 const ContactPage = lazy(() => import('./components/ContactSection'));
+
+const homePaths = new Set(Object.values(localePrefix).map((prefix) => prefix || '/'));
+const isHomePath = (pathname: string) => homePaths.has(pathname.replace(/\/$/, '') || '/');
+
+/**
+ * The page scrolls an inner container, not the document, so resetting the
+ * window leaves the previous page's scroll position in place. Navigating from
+ * far down the article archive used to land the reader near the end of the
+ * article they opened.
+ */
+function resetScroll() {
+  const container = document.querySelector('.site-content');
+  if (container) container.scrollTop = 0;
+  window.scrollTo(0, 0);
+}
 
 function ScrollToRoute() {
   const { pathname, hash } = useLocation();
@@ -24,8 +43,10 @@ function ScrollToRoute() {
     };
 
     if (scrollToHash()) return;
-    if (pathname !== '/' || !hash) {
-      window.scrollTo(0, 0);
+    // Only a homepage renders the anchored sections, so only there is it worth
+    // waiting for the target to mount. Every other route goes to the top.
+    if (!hash || !isHomePath(pathname)) {
+      resetScroll();
       return;
     }
 
@@ -50,27 +71,46 @@ function ScrollToRoute() {
   return null;
 }
 
+function ContactRoute() {
+  useSeo({ path: '/contacto', title: 'Hablemos de tu proyecto', description: 'Cuéntanos sobre el producto, sistema o capacidad de IA que tu equipo necesita.', lang: 'es' });
+  return <main id="contenido"><ContactPage /></main>;
+}
+
 function AppContent() {
   const { t } = useLanguage();
   return (
     <>
       <ScrollToRoute />
       <Header />
-      <Suspense fallback={<div className="g-route-status" role="status">{t.loadingPage}</div>}>
+      <div className="site-content">
+      <Suspense fallback={<div className="g-route-status" role="status" data-page-loading="true">{t.loadingPage}</div>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
+          <Route path="/es" element={<HomePage />} />
+          <Route path="/blog" element={<main id="contenido" className="g-blog-archive"><BlogIndexPage /></main>} />
+          <Route path="/es/blog" element={<main id="contenido" className="g-blog-archive"><BlogIndexPage /></main>} />
+          <Route path="/es/blog/:articleSlug" element={<main id="contenido"><ArticlePage /></main>} />
+          <Route path="*" element={<main id="contenido"><NotFoundPage /></main>} />
           <Route path="/blog/:articleSlug" element={<main id="contenido"><ArticlePage /></main>} />
-          <Route path="/contacto" element={<main id="contenido"><ContactPage /></main>} />
+          <Route path="/contacto" element={<ContactRoute />} />
         </Routes>
       </Suspense>
       <Footer />
+      </div>
+
     </>
   );
 }
 
+export function LocalizedApp() {
+  const { pathname } = useLocation();
+  return <LanguageProvider locale={isHomePath(pathname) || pathname === "/contacto" ? "es" : localeFromPath(pathname)}><AppContent /></LanguageProvider>;
+}
+
 function App() {
   return (
-      <LanguageProvider defaultLocale="es"><BrowserRouter><AppContent /></BrowserRouter></LanguageProvider>
+      <BrowserRouter><LocalizedApp /></BrowserRouter>
+
   );
 }
 

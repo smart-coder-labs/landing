@@ -1,0 +1,15 @@
+{
+  "title": "Estrategias de caché: invalidación sin dolor",
+  "description": "Cachear es fácil; invalidar es donde aparecen los errores raros. Patrones que funcionan y los que producen datos rancios.",
+  "tags": [
+    "cache",
+    "rendimiento",
+    "arquitectura",
+    "backend",
+    "escalabilidad"
+  ],
+  "image": "/articles/estrategias-de-cache/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-07-16",
+  "slug": "estrategias-de-cache"
+}

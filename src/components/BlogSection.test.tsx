@@ -1,27 +1,64 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+import { LanguageProvider } from '../i18n';
+import type { ArticleSummary } from '../lib';
 import BlogSection from './BlogSection';
 
-const { getPublishedArticles } = vi.hoisted(() => ({
-  getPublishedArticles: vi.fn(),
+const { getPublishedArticles } = vi.hoisted(() => ({ getPublishedArticles: vi.fn() }));
+
+vi.mock('../lib', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('../lib')>()),
+  getPublishedArticles,
 }));
-vi.mock('../lib', () => ({ getPublishedArticles }));
+
+function summary(slug: string, title: string): ArticleSummary {
+  return {
+    slug, title, description: 'Visible content', readTimeMinutes: 4, publishedAt: '2026-01-01',
+    coverImage: `/articles/${slug}/images/portada.png`, coverAlt: title, tags: ['TypeScript'],
+  };
+}
+
+function renderSection(path = '/', locale: 'en' | 'es' = 'en') {
+  return render(
+    <MemoryRouter initialEntries={[path]}>
+      <LanguageProvider locale={locale}><BlogSection /></LanguageProvider>
+    </MemoryRouter>,
+  );
+}
 
 describe('BlogSection', () => {
-  beforeEach(() => { getPublishedArticles.mockReset(); });
+  it('renders every published article with a repository-hosted cover', () => {
+    getPublishedArticles.mockReturnValue([summary('published', 'Published article')]);
+    const { container } = renderSection();
 
-  it('shows only published query results and resolves the cover image', async () => {
-    getPublishedArticles.mockResolvedValue([{ slug: 'published', title: 'Published article', description: 'Visible content', read_time_minutes: 4, published_at: '2026-01-01', cover_asset: { id: 'cover', object_path: 'articles/published/cover.png', alt_text: 'Cover', is_cover: true, signed_url: 'https://assets.test/articles/published/cover.png?token=signed' } }]);
-    render(<MemoryRouter><BlogSection /></MemoryRouter>);
-    expect(await screen.findByRole('heading', { name: 'Published article' })).toBeInTheDocument();
-    expect(screen.getByRole('img', { name: 'Cover' })).toHaveAttribute('src', 'https://assets.test/articles/published/cover.png?token=signed');
-    expect(getPublishedArticles).toHaveBeenCalledOnce();
+    screen.getByRole('heading', { name: 'Published article' });
+    // A public path, so it cannot expire the way a signed storage URL does.
+    expect(container.querySelector('.article-card img')).toHaveAttribute('src', '/articles/published/images/portada.png');
+    expect(screen.getByRole('link', { name: /read article/i })).toHaveAttribute('href', '/blog/published');
   });
 
-  it('shows the empty state when the published query fails', async () => {
-    getPublishedArticles.mockRejectedValue(new Error('database unavailable'));
-    render(<MemoryRouter><BlogSection /></MemoryRouter>);
-    expect(await screen.findByRole('alert')).toHaveTextContent('No insights are available right now.');
+  it('keeps the reader in their language when linking to an article', () => {
+    getPublishedArticles.mockReturnValue([summary('published', 'Published article')]);
+    renderSection('/es', 'es');
+
+    expect(screen.getByRole('link', { name: /leer artículo/i })).toHaveAttribute('href', '/es/blog/published');
+  });
+
+  it('shows an empty state when nothing is published, with no error', () => {
+    getPublishedArticles.mockReturnValue([]);
+    renderSection();
+
+    expect(screen.getByText('No insights are published yet.')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+  });
+
+  it('renders without a loading state because the content ships with the build', () => {
+    getPublishedArticles.mockReturnValue([summary('a', 'First'), summary('b', 'Second')]);
+    const { container } = renderSection();
+
+    expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+    expect(within(container.querySelector('.article-grid') as HTMLElement).getAllByRole('heading')).toHaveLength(2);
   });
 });

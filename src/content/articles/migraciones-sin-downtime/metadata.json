@@ -1,0 +1,15 @@
+{
+  "title": "Migraciones de base de datos sin downtime",
+  "description": "Renombrar una columna puede tumbar el servicio. El patrón de expansión y contracción, paso a paso.",
+  "tags": [
+    "base de datos",
+    "migraciones",
+    "despliegue",
+    "backend",
+    "operaciones"
+  ],
+  "image": "/articles/migraciones-sin-downtime/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-07-20",
+  "slug": "migraciones-sin-downtime"
+}

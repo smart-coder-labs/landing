@@ -1,0 +1,15 @@
+{
+  "title": "Idempotencia y reintentos en sistemas distribuidos",
+  "description": "Todo reintento asume que repetir la operación es seguro. Cómo diseñar para que lo sea, y qué se rompe cuando no lo es.",
+  "tags": [
+    "sistemas distribuidos",
+    "arquitectura",
+    "confiabilidad",
+    "apis",
+    "backend"
+  ],
+  "image": "/articles/idempotencia-y-reintentos/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-07-23",
+  "slug": "idempotencia-y-reintentos"
+}

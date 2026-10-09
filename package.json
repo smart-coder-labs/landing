@@ -5,17 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run prerender",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "build:ssg": "vite build --config vite.ssg.config.ts",
+    "prerender": "npm run build:ssg && node scripts/prerender.mjs",
+    "build:client": "vite build"
   },
   "dependencies": {
     "@smart-coder-labs/eslint-config": "^1.0.2",
     "@smart-coder-labs/vite-config": "^1.0.2",
     "@supabase/supabase-js": "^2.50.2",
-    "framer-motion": "^12.23.24",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

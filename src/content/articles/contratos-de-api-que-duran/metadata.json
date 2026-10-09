@@ -1,0 +1,15 @@
+{
+  "title": "Contratos de API que sobreviven al cambio",
+  "description": "Versionar no es la primera respuesta. Cómo diseñar interfaces que evolucionan sin romper a quien las consume.",
+  "tags": [
+    "apis",
+    "arquitectura",
+    "backend",
+    "versionado",
+    "integracion"
+  ],
+  "image": "/articles/contratos-de-api-que-duran/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-06-29",
+  "slug": "contratos-de-api-que-duran"
+}

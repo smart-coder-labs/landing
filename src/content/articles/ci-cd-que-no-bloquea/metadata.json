@@ -1,0 +1,15 @@
+{
+  "title": "CI/CD que no bloquea al equipo",
+  "description": "Una tubería lenta o inestable enseña a la gente a ignorarla. Cómo mantenerla rápida y confiable.",
+  "tags": [
+    "ci cd",
+    "devops",
+    "entrega continua",
+    "pruebas",
+    "productividad"
+  ],
+  "image": "/articles/ci-cd-que-no-bloquea/images/portada.jpg",
+  "readTime": "9 min",
+  "publicationDate": "2026-06-22",
+  "slug": "ci-cd-que-no-bloquea"
+}

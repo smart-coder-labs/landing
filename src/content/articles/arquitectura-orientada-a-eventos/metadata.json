@@ -1,0 +1,15 @@
+{
+  "title": "Arquitectura orientada a eventos: cuándo vale la complejidad",
+  "description": "Desacoplar con eventos resuelve problemas reales y crea otros. Cuándo el intercambio conviene y cómo no equivocarse.",
+  "tags": [
+    "eventos",
+    "arquitectura",
+    "sistemas distribuidos",
+    "backend",
+    "escalabilidad"
+  ],
+  "image": "/articles/arquitectura-orientada-a-eventos/images/portada.jpg",
+  "readTime": "10 min",
+  "publicationDate": "2026-06-18",
+  "slug": "arquitectura-orientada-a-eventos"
+}
