@@ -9,6 +9,15 @@
     <meta name="description" content="Productos de software, backend e inteligencia artificial aplicada. Diseñamos, construimos y evolucionamos herramientas con tu equipo." />
     <link rel="canonical" href="https://www.smartcoderlabs.com/" />
     <meta name="theme-color" content="#101114" />
+    <script>
+      // Apply the saved theme before paint; storage may be blocked by the browser.
+      try {
+        document.documentElement.dataset.theme =
+          localStorage.getItem('smartcoder-landing-theme') === 'dark' ? 'dark' : 'light';
+      } catch {
+        document.documentElement.dataset.theme = 'light';
+      }
+    </script>
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SmartCoderLabs" />

@@ -52,6 +52,12 @@ export function useNavigation(ref: RefObject<HTMLElement>) {
         if (event.shiftKey && document.activeElement === menu) {
           event.preventDefault();
           links.at(-1)?.focus();
+        } else if (!event.shiftKey && document.activeElement === menu) {
+          event.preventDefault();
+          links[0]?.focus();
+        } else if (event.shiftKey && document.activeElement === links[0]) {
+          event.preventDefault();
+          menu.focus();
         } else if (!event.shiftKey && document.activeElement === links.at(-1)) {
           event.preventDefault();
           menu.focus();

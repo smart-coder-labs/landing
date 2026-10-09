@@ -1,4 +1,5 @@
 import { useRef } from "react";
+import ThemeToggle from "./ThemeToggle";
 import { useNavigation } from "./useNavigation";
 
 export default function GlobantHeader() {
@@ -17,17 +18,6 @@ export default function GlobantHeader() {
               <path d="M2 3h5l8 9-8 9H2l8-9Z" />
             </svg>
           </a>
-          <button
-            className="g-menu-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="g-navigation"
-          >
-            <span>Menú</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 7h16M4 12h16M4 17h16" />
-            </svg>
-          </button>
           <nav id="g-navigation" aria-label="Navegación principal">
             <a href="/#capacidades">
               Qué hacemos
@@ -41,20 +31,22 @@ export default function GlobantHeader() {
             <a className="g-nav-contact" href="/#contacto">
               Hablemos
             </a>
-            <a
-              className="g-review-link"
-              href="/#proyectos"
-              aria-label="Explorar proyectos"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" />
-              </svg>
-              <span>Proyectos</span>
-            </a>
             <span className="g-language" lang="es">
               ES
             </span>
           </nav>
+          <ThemeToggle />
+          <button
+            className="g-menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="g-navigation"
+          >
+            <span>Menú</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+          </button>
         </div>
       </header>
     </>

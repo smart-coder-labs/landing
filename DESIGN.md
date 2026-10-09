@@ -232,7 +232,7 @@ White service cards combine narrow conceptual imagery, title, body and bottom-al
 
 ### Navigation
 
-The dark sticky band holds branding, section anchors, a project shortcut and an ES language label. The label is text; the capability chevron is a section anchor. The mobile menu reports expanded state, locks background scrolling, closes with Escape and cycles focus through its trigger and links. Root-relative section URLs allow the shared header to work from contact and article routes.
+The dark sticky band holds branding, section anchors, a light/dark toggle and an ES language label. The label is text; the capability chevron is a section anchor. The mobile menu reports expanded state, locks background scrolling, closes with Escape and cycles focus through its trigger and links. Root-relative section URLs allow the shared header to work from contact and article routes.
 
 ### Carousel
 
@@ -261,3 +261,10 @@ White fields use the source field border, modest rounding and 12px padding. Labe
 - Don't import Globant logos, proprietary imagery, customer claims or endorsements.
 - Don't use decorative miniature text as a functional typography standard.
 - Don't invent testimonials, business metrics, live status or successful form submissions.
+
+
+## Dark appearance
+
+The user-requested dark variant preserves the Lima accents, Heebo type, composition and imagery. `src/styles/theme.css` applies semantic overrides under `:root[data-theme="dark"]`: canvas `#111612`, elevated surface `#202a21`, soft surface `#19211a`, primary text `#edf1e8`, body `#bcc5b6`, muted text `#acbca3`, borders `#384637`. Lime actions retain dark ink; article artwork keeps its original contrast.
+
+The header's sun/moon button is available on desktop and mobile, announces “Modo oscuro” and exposes `aria-pressed`. Light remains the default. The visitor's choice persists under `smartcoder-landing-theme`, is applied before first paint, and synchronizes between tabs. Blocked storage still allows switching for the current page. Article, archive and contact routes share the theme.
