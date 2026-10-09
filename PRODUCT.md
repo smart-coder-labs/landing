@@ -26,7 +26,7 @@ Use the SmartCoderLabs name and the supplied Spanish voice. The user selected th
 
 ## Evidence on Hand
 
-The supplied copy is implemented in `src/components/globant/`. NexusMind and J.A.R.V.I.S. are explicitly presented as Cesar Ruiz's own projects, with links to his public portfolio; they are not client endorsements or company delivery metrics. Architecture and voice illustrations are conceptual or simplified.
+The supplied copy is implemented in `src/components/globant/`. NexusMind and J.A.R.V.I.S. are presented as architecture examples with links to their public case studies; they are not client endorsements or company delivery metrics. At the user's request, the landing omits personal name mentions and attribution labels. Architecture and voice illustrations are conceptual or simplified.
 
 Original supplied WebP illustrations, local Heebo font files and their provenance/license material are retained under `public/assets/globant-inspired/`. Preserve attribution and asset provenance. No supplied testimonials, customer logos, quantified outcomes or live system telemetry support additional claims.
 

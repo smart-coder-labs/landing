@@ -10,10 +10,10 @@ export default function GlobantProjects() {
       <header className="g-section-heading g-centered">
         <h2 id="g-stories-heading">Detrás de una buena decisión.</h2>
         <p>
-          Dos proyectos propios de Cesar Ruiz muestran cómo aborda problemas de
-          arquitectura.
-          <br className="g-desktop-break" /> Puedes consultar el contexto y los
-          trade-offs en su portafolio público.
+          Dos proyectos que exploran decisiones de arquitectura para sistemas de
+          IA.
+          <br className="g-desktop-break" /> Conoce el contexto y las decisiones
+          técnicas detrás de cada caso.
         </p>
       </header>
       <div className="g-story-layout">
@@ -33,12 +33,11 @@ export default function GlobantProjects() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Leer el caso de Cesar
+            Explorar el caso
             <svg viewBox="0 0 20 20" aria-hidden="true">
               <path d="M5 15 15 5M5 5h10v10" />
             </svg>
           </a>
-          <p className="g-attribution">Proyecto propio de Cesar Ruiz.</p>
         </div>
         <div className="g-story-visual">
           <div className="g-memory-title">
@@ -170,7 +169,6 @@ export default function GlobantProjects() {
               <path d="M5 15 15 5M5 5h10v10" />
             </svg>
           </a>
-          <p className="g-attribution">Proyecto propio de Cesar Ruiz.</p>
         </div>
       </div>
     </section>

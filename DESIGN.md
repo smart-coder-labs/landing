@@ -253,7 +253,7 @@ White fields use the source field border, modest rounding and 12px padding. Labe
 - Do preserve the supplied composition, white page, dark framing, Lima palette, Heebo hierarchy and editorial spacing.
 - Do retain the supplied assets, provenance and Heebo license.
 - Do preserve visible focus, keyboard navigation, pause controls and reduced-motion behavior.
-- Do retain Cesar Ruiz attribution and the actual contact address.
+- Do keep project descriptions neutral, omit personal name mentions as requested, and retain the actual contact address.
 
 ### Don't:
 

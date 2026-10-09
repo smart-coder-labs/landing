@@ -24,13 +24,7 @@ export default function GlobantFooter() {
         <div>
           <h2>Conoce más</h2>
           <a href="/">SmartCoderLabs</a>
-          <a
-            href="https://cr8297408.github.io/backend-engineering-portfolio/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Portafolio de Cesar Ruiz
-          </a>
+          <a href="/blog">Ideas y artículos</a>
         </div>
       </div>
       <div className="g-footer-bottom g-wide">

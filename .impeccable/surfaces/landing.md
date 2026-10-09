@@ -17,7 +17,7 @@ Retain the original eight sections in order:
 3. Capabilities: software products, backend/APIs/data and AI.
 4. Operating model: build, operate and evolve.
 5. Principles: context, explicit limits, evaluation and shared knowledge.
-6. Projects: NexusMind and J.A.R.V.I.S., explicitly attributed to Cesar Ruiz.
+6. Projects: NexusMind and J.A.R.V.I.S., presented as architecture examples without personal name mentions, as requested by the user.
 7. Ideas: three articles at the existing blog routes.
 8. Contact: a direct email conversation with static topic labels.
 
